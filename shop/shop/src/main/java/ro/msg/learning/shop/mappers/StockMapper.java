@@ -3,10 +3,12 @@ package ro.msg.learning.shop.mappers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ro.msg.learning.shop.dtos.StockDTO;
-import ro.msg.learning.shop.entities.Location;
 import ro.msg.learning.shop.entities.Stock;
 import ro.msg.learning.shop.repositories.LocationRepository;
 import ro.msg.learning.shop.repositories.ProductRepository;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -26,5 +28,12 @@ public class StockMapper {
                 .location(locationRepository.findById(stockDTO.getLocation_id()).get())
                 .product(productRepository.findById(stockDTO.getProduct_id()).get())
                 .build();
+    }
+    public List<StockDTO> stockListToStockListDTO(List<Stock>stocks){
+        List<StockDTO> resultedStocksDTO = new ArrayList<>();
+        for(Stock crtStock: stocks){
+           resultedStocksDTO.add(stockToStockDTO(crtStock));
+        }
+        return resultedStocksDTO;
     }
 }

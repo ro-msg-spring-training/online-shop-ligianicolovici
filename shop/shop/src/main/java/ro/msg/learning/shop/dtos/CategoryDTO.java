@@ -1,5 +1,4 @@
 package ro.msg.learning.shop.dtos;
-
 import lombok.AllArgsConstructor;
 
 import lombok.Builder;
@@ -13,6 +12,8 @@ import java.io.Serializable;
 @Builder
 @AllArgsConstructor
 public class CategoryDTO implements Serializable {
+
     private String name;
     private String description;
 }
+
