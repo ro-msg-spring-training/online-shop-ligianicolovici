@@ -4,5 +4,6 @@
       "name": "strategy",
       "type": "ro.msg.learning.shop.strategies.StrategyEnum",
       "description": "Description for strategy."
-  }
-] }
+    }
+  ]
+}

@@ -9,7 +9,8 @@ import ro.msg.learning.shop.entities.Product;
 @RequiredArgsConstructor
 public class ProductMapper {
     private final CategoryMapper categoryMapper;
-    public ProductDTO productToProductDTO(Product product){
+
+    public ProductDTO productToProductDTO(Product product) {
         return ProductDTO.builder()
                 .name(product.getName())
                 .description(product.getDescription())

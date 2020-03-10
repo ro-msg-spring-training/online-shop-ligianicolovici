@@ -8,8 +8,8 @@ import ro.msg.learning.shop.entities.Location;
 @Component
 @RequiredArgsConstructor
 public class LocationMapper {
-    public LocationDTO locationToLocationDTO(Location location){
-        LocationDTO locationDTO= LocationDTO.builder()
+    public LocationDTO locationToLocationDTO(Location location) {
+        LocationDTO locationDTO = LocationDTO.builder()
                 .addressCity(location.getAddressCity())
                 .addressCountry(location.getAddressCountry())
                 .addressStreet(location.getAddressStreet())
@@ -17,8 +17,9 @@ public class LocationMapper {
                 .build();
         return locationDTO;
     }
-    public Location locationDTOToLocation(LocationDTO locationDTO){
-        Location location= Location.builder()
+
+    public Location locationDTOToLocation(LocationDTO locationDTO) {
+        Location location = Location.builder()
                 .addressCity(locationDTO.getAddressCity())
                 .addressCountry(locationDTO.getAddressCountry())
                 .addressStreet(locationDTO.getAddressStreet())

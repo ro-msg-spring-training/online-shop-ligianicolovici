@@ -14,28 +14,33 @@ public class ProductController {
 
     private final ProductService productService;
 
-    @PostMapping
-    public ProductDTO createProduct(@RequestBody ProductDTO productDTO){
+    @RequestMapping(method = RequestMethod.POST, produces = {"application/json"})
+    @ResponseBody
+    public ProductDTO createProduct(@RequestBody ProductDTO productDTO) {
         return productService.createProduct(productDTO);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteProduct(@PathVariable Integer id){
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+    @ResponseBody
+    public void deleteProduct(@PathVariable Integer id) {
         productService.deleteProductById(id);
     }
 
-    @GetMapping
-    public List<ProductDTO> readProducts(){
+    @RequestMapping(method = RequestMethod.GET, produces = {"application/json"})
+    @ResponseBody
+    public List<ProductDTO> readProducts() {
         return productService.getAllProducts();
     }
 
-    @PostMapping("/{id}")
-    public ProductDTO updateProduct(@PathVariable Integer id, @RequestBody ProductDTO productDTO){
-        return productService.updateProduct(id,productDTO);
+    @RequestMapping(method = RequestMethod.POST, value = "/{id}", produces = {"application/json"})
+    @ResponseBody
+    public ProductDTO updateProduct(@PathVariable Integer id, @RequestBody ProductDTO productDTO) {
+        return productService.updateProduct(id, productDTO);
     }
 
-    @GetMapping("/{id}")
-    public ProductDTO readProductById(@PathVariable Integer id){
+    @RequestMapping(method = RequestMethod.GET, value = "/{id}", produces = {"application/json"})
+    @ResponseBody
+    public ProductDTO readProductById(@PathVariable Integer id) {
         return productService.getProductById(id);
     }
 }

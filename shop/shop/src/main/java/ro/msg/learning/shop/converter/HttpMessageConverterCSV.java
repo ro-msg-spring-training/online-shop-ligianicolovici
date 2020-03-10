@@ -30,7 +30,6 @@ public class HttpMessageConverterCSV extends AbstractGenericHttpMessageConverter
     }
 
 
-
     @Override
     protected void writeInternal(Object o, Type type, HttpOutputMessage httpOutputMessage) throws HttpMessageNotWritableException, IOException {
 
@@ -38,7 +37,7 @@ public class HttpMessageConverterCSV extends AbstractGenericHttpMessageConverter
 
         if (o instanceof List)
             arrayList = new ArrayList<>((ArrayList<Object>) o);
-        else if (o instanceof LinkedHashMap){
+        else if (o instanceof LinkedHashMap) {
             throw new CSVExporterException("Couldn't export results as csv file");
         } else {
             arrayList = Collections.singletonList(o);

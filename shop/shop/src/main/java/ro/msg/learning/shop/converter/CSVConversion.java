@@ -7,7 +7,6 @@ import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 
 import java.io.IOException;
 import java.io.InputStream;
-
 import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -18,7 +17,7 @@ public class CSVConversion<T> {
     public List<T> fromCsv(Class<T> csvClass, InputStream csvData) throws IOException {
 
         CsvMapper mapper = new CsvMapper();
-        CsvSchema schema = mapper.schemaFor(csvClass);
+        CsvSchema schema = mapper.schemaFor(csvClass).withHeader();
 
         MappingIterator<T> it = mapper.readerFor(csvClass).with(schema)
                 .readValues(csvData);

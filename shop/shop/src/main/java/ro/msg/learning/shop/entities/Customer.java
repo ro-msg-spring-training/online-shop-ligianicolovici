@@ -1,7 +1,9 @@
 package ro.msg.learning.shop.entities;
+
 import lombok.*;
+
 import javax.persistence.*;
-import java.util.*;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -23,5 +25,5 @@ public class Customer {
 
     @OneToMany(mappedBy = "customer")
     @ToString.Exclude
-    private List<Order>orders;
+    private List<Order> orders;
 }

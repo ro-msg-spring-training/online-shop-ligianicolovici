@@ -38,7 +38,7 @@ public class Order {
             joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "location_id"))
     @Fetch(value = FetchMode.SELECT)
-    private Set<Location>shippedFrom;
+    private Set<Location> shippedFrom;
 
     @ManyToOne
     private Customer customer;

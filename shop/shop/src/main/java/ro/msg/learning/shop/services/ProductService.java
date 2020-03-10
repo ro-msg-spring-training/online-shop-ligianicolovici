@@ -22,8 +22,8 @@ public class ProductService {
     private final ProductMapper productMapper;
     private final CategoryRepository productCategoryRepo;
 
-    public ProductDTO createProduct(ProductDTO productDto){
-        Product product= Product.builder()
+    public ProductDTO createProduct(ProductDTO productDto) {
+        Product product = Product.builder()
                 .name(productDto.getName())
                 .description(productDto.getDescription())
                 .price(productDto.getPrice())
@@ -34,25 +34,26 @@ public class ProductService {
         productRepository.save(product);
         return productMapper.productToProductDTO(product);
     }
-    public ProductCategory checkCategoryExistence(CategoryDTO category){
+
+    public ProductCategory checkCategoryExistence(CategoryDTO category) {
         Optional<ProductCategory> searchedCategory = productCategoryRepo.findByName(category.getName());
-        ProductCategory crtProductCategory=null;
-        if(searchedCategory.isPresent()){
-            crtProductCategory=searchedCategory.get();
-        }else{
+        ProductCategory crtProductCategory = null;
+        if (searchedCategory.isPresent()) {
+            crtProductCategory = searchedCategory.get();
+        } else {
             crtProductCategory = new ProductCategory();
             crtProductCategory.setName(category.getName());
             crtProductCategory.setDescription(category.getDescription());
             productCategoryRepo.save(crtProductCategory);
         }
-        return  crtProductCategory;
+        return crtProductCategory;
 
     }
 
-    public ProductDTO updateProduct(Integer id, ProductDTO updatedProduct){
-        ProductDTO resultedProduct=null;
-        Optional<Product> productToUpdate= productRepository.findById(id);
-        if(productToUpdate.isPresent()){
+    public ProductDTO updateProduct(Integer id, ProductDTO updatedProduct) {
+        ProductDTO resultedProduct = null;
+        Optional<Product> productToUpdate = productRepository.findById(id);
+        if (productToUpdate.isPresent()) {
             Product updated = productRepository.findById(id).get();
             updated.setName(updatedProduct.getName());
             updated.setPrice(updatedProduct.getPrice());
@@ -61,26 +62,27 @@ public class ProductService {
             updated.setImageUrl(updatedProduct.getImageUrl());
             updated.setProductCategory(checkCategoryExistence(updatedProduct.getProductCategory()));
             productRepository.save(updated);
-            resultedProduct=productMapper.productToProductDTO(updated);
+            resultedProduct = productMapper.productToProductDTO(updated);
         }
-        return  resultedProduct;
+        return resultedProduct;
     }
+
     public void deleteProductById(Integer id) {
         productRepository.deleteById(id);
     }
 
-    public List<ProductDTO> getAllProducts(){
-        List<ProductDTO> existingProducts= new ArrayList<>();
-        try{
+    public List<ProductDTO> getAllProducts() {
+        List<ProductDTO> existingProducts = new ArrayList<>();
+        try {
             List<Product> products = productRepository.findAll();
-            if(products.isEmpty()){
+            if (products.isEmpty()) {
                 throw new ProductNotFoundException("No products were found");
-            }else{
-                for(Product p: products){
+            } else {
+                for (Product p : products) {
                     existingProducts.add(productMapper.productToProductDTO(p));
                 }
             }
-        }catch (ProductNotFoundException ex){
+        } catch (ProductNotFoundException ex) {
             System.out.println(ex.getMessage());
         }
         return existingProducts;
@@ -88,10 +90,10 @@ public class ProductService {
     }
 
     public ProductDTO getProductById(Integer id) {
-        Optional<Product>searchedProduct= productRepository.findById(id);
-        if(searchedProduct.isPresent()){
+        Optional<Product> searchedProduct = productRepository.findById(id);
+        if (searchedProduct.isPresent()) {
             return productMapper.productToProductDTO(searchedProduct.get());
-        }else{
+        } else {
             throw new ProductNotFoundException("Product not found!");
         }
     }

@@ -17,10 +17,10 @@ public class LocationService {
     private final LocationRepository locationRepository;
     private final LocationMapper locationMapper;
 
-    public List<LocationDTO> getAllLocations(){
+    public List<LocationDTO> getAllLocations() {
         List<LocationDTO> allLocationToDTO = new ArrayList<>();
-        List<Location>locations = locationRepository.findAll();
-        for(Location l:locations){
+        List<Location> locations = locationRepository.findAll();
+        for (Location l : locations) {
             allLocationToDTO.add(locationMapper.locationToLocationDTO(l));
         }
         return allLocationToDTO;

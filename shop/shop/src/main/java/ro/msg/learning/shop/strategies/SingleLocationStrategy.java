@@ -1,6 +1,5 @@
 package ro.msg.learning.shop.strategies;
 
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import ro.msg.learning.shop.dtos.OrderDetailDTO;
@@ -8,10 +7,8 @@ import ro.msg.learning.shop.dtos.StockDTO;
 import ro.msg.learning.shop.entities.Location;
 import ro.msg.learning.shop.entities.Stock;
 import ro.msg.learning.shop.exceptions.ProductsCantBeShipped;
-import ro.msg.learning.shop.mappers.StockMapper;
 import ro.msg.learning.shop.repositories.LocationRepository;
 import ro.msg.learning.shop.repositories.StockRepository;
-import ro.msg.learning.shop.services.OrderService;
 import ro.msg.learning.shop.services.StockService;
 
 import java.util.ArrayList;
@@ -21,42 +18,38 @@ import java.util.List;
 public class SingleLocationStrategy implements StrategyChoiceInterface {
 
     @Autowired
-    private  StockRepository stockRepository;
+    private StockRepository stockRepository;
 
     @Autowired
-    private  LocationRepository locationRepository;
+    private LocationRepository locationRepository;
 
     @Autowired
     private StockService stockService;
 
-    @Autowired
-    private StockMapper stockMapper;
-
-
 
     @Override
     public List<StockDTO> implementStrategy(List<OrderDetailDTO> orderDetailDTOList) {
-        List<Location>allLocations = locationRepository.findAll();
-        List<StockDTO>resultStockList = new ArrayList<>();
+        List<Location> allLocations = locationRepository.findAll();
+        List<StockDTO> resultStockList = new ArrayList<>();
 
-        for(Location location:allLocations){
+        for (Location location : allLocations) {
             List<Stock> localStock = stockRepository.findAllByLocation_Id(location.getId());
 
             resultStockList.clear();
 
-            for(Stock crtStock:localStock){
-                for(OrderDetailDTO orderProduct:orderDetailDTOList){
-                    if(crtStock.getProduct().getId().equals(orderProduct.getProductId())&& orderProduct.getQuantity() <= crtStock.getQuantity()){
+            for (Stock crtStock : localStock) {
+                for (OrderDetailDTO orderProduct : orderDetailDTOList) {
+                    if (crtStock.getProduct().getId().equals(orderProduct.getProductId()) && orderProduct.getQuantity() <= crtStock.getQuantity()) {
                         resultStockList.add(
                                 StockDTO.builder()
-                                    .product_id(orderProduct.getProductId())
-                                    .location_id(location.getId())
-                                    .quantity(orderProduct.getQuantity())
-                                .build()
+                                        .product_id(orderProduct.getProductId())
+                                        .location_id(location.getId())
+                                        .quantity(orderProduct.getQuantity())
+                                        .build()
                         );
-                        stockService.updateStock(orderProduct.getProductId(),location.getId(),crtStock,orderProduct.getQuantity());
+                        stockService.updateStock(orderProduct.getProductId(), location.getId(), crtStock, orderProduct.getQuantity());
 
-                        if(resultStockList.size()== orderDetailDTOList.size()){
+                        if (resultStockList.size() == orderDetailDTOList.size()) {
                             return resultStockList;
                         }
                     }

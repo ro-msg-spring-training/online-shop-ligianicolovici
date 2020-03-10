@@ -15,22 +15,25 @@ public class StrategyConfiguration {
     @Value("${strategy}")
     private String strategy;
 
+    private SingleLocationStrategy singleLocationStrategy = new SingleLocationStrategy();
+    private MostAbundantStrategy mostAbundantStrategy = new MostAbundantStrategy();
+
     @Bean
-    public StrategyChoiceInterface decideStrategy(){
-        if(testIfValueIsValid()){
+    public StrategyChoiceInterface decideStrategy() {
+        if (testIfValueIsValid()) {
             StrategyEnum strategyType = StrategyEnum.valueOf(strategy.toUpperCase());
-            if(strategyType== StrategyEnum.SINGLE_LOCATION){
-                return new SingleLocationStrategy();
-            }else{
-                 return new MostAbundantStrategy();
+            if (strategyType == StrategyEnum.SINGLE_LOCATION) {
+                return singleLocationStrategy;
+            } else {
+                return mostAbundantStrategy;
             }
         }
         throw new ProductsCantBeShipped("Can't get");
     }
 
-    public boolean testIfValueIsValid(){
-        for(StrategyEnum enumItem: StrategyEnum.values()){
-            if(enumItem.name().equals(strategy.toUpperCase())){
+    public boolean testIfValueIsValid() {
+        for (StrategyEnum enumItem : StrategyEnum.values()) {
+            if (enumItem.name().equals(strategy.toUpperCase())) {
                 return true;
             }
         }

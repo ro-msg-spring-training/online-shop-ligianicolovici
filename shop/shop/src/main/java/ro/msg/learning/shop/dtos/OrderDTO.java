@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.util.List;
 
 @Builder
@@ -11,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 public class OrderDTO {
+    private Integer orderID;
     private Integer userID;
     private List<OrderDetailDTO> orderedProducts;
     private String addressCity;
