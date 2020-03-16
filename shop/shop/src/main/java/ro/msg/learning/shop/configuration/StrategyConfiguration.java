@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ro.msg.learning.shop.exceptions.ProductsCantBeShipped;
-import ro.msg.learning.shop.strategies.MostAbundantStrategy;
-import ro.msg.learning.shop.strategies.SingleLocationStrategy;
-import ro.msg.learning.shop.strategies.StrategyChoiceInterface;
-import ro.msg.learning.shop.strategies.StrategyEnum;
+import ro.msg.learning.shop.strategies.*;
 
 @Configuration
 public class StrategyConfiguration {
@@ -17,6 +14,7 @@ public class StrategyConfiguration {
 
     private SingleLocationStrategy singleLocationStrategy = new SingleLocationStrategy();
     private MostAbundantStrategy mostAbundantStrategy = new MostAbundantStrategy();
+    private GreedyStrategy greedyStrategy = new GreedyStrategy();
 
     @Bean
     public StrategyChoiceInterface decideStrategy() {
@@ -25,7 +23,11 @@ public class StrategyConfiguration {
             if (strategyType == StrategyEnum.SINGLE_LOCATION) {
                 return singleLocationStrategy;
             } else {
-                return mostAbundantStrategy;
+                if (strategyType == StrategyEnum.MOST_ABUNDANT) {
+                    return mostAbundantStrategy;
+                } else {
+                    return greedyStrategy;
+                }
             }
         }
         throw new ProductsCantBeShipped("Can't get");

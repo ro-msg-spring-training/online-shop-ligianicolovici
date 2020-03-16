@@ -7,14 +7,15 @@ import ro.msg.learning.shop.dtos.OrderDTO;
 import ro.msg.learning.shop.dtos.OrderDetailDTO;
 import ro.msg.learning.shop.dtos.ProductDTO;
 import ro.msg.learning.shop.dtos.StockDTO;
-import ro.msg.learning.shop.entities.Location;
-import ro.msg.learning.shop.entities.Order;
-import ro.msg.learning.shop.entities.OrderDetail;
+import ro.msg.learning.shop.entities.*;
+import ro.msg.learning.shop.exceptions.ClientIsNotRegistered;
+import ro.msg.learning.shop.exceptions.ProductNotFoundException;
 import ro.msg.learning.shop.exceptions.ProductsCantBeShipped;
 import ro.msg.learning.shop.mappers.OrderDetailMapper;
 import ro.msg.learning.shop.mappers.OrderMapper;
 import ro.msg.learning.shop.mappers.ProductMapper;
 import ro.msg.learning.shop.repositories.*;
+import ro.msg.learning.shop.util.LocationFormatMapQuest;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -37,27 +38,32 @@ public class OrderService {
         OrderDTO newOrder;
         LocalDateTime localDateTime = LocalDateTime.now();
         List<OrderDetail> result = registerOrderedProducts(orderDTO.getOrderedProducts(), false);
-        List<StockDTO> strategyResult = strategyConfiguration.decideStrategy().implementStrategy(orderDetailMapper.orderDetailListToOrderDetailDTOList(result));
+        LocationFormatMapQuest deliveryLocation = new LocationFormatMapQuest(null, orderDTO.getAddressCity(), orderDTO.getAddressCountry());
+        List<StockDTO> strategyResult = strategyConfiguration.decideStrategy().implementStrategy(orderDetailMapper.orderDetailListToOrderDetailDTOList(result), deliveryLocation);
         Set<Location> locationsForShippingProducts = getShippingLocations(strategyResult);
-        if (strategyResult.size() > 0) {
-            System.out.println(strategyResult.toString());
-            Order createNewOrder = Order.builder()
-                    .customer(customerRepository.findById(orderDTO.getUserID()).get())
-                    .addressCity(orderDTO.getAddressCity())
-                    .addressCountry(orderDTO.getAddressCountry())
-                    .addressStreet(orderDTO.getAddressStreet())
-                    .orderDetails(registerOrderedProducts(orderDTO.getOrderedProducts(), true))
-                    .shippedFrom(locationsForShippingProducts)
-                    .createdAt(localDateTime)
-                    .build();
+        if (!strategyResult.isEmpty()) {
+            Optional<Customer> client = customerRepository.findById(orderDTO.getUserID());
+            if (client.isPresent()) {
+                Order createNewOrder = Order.builder()
+                        .customer(client.get())
+                        .addressCity(orderDTO.getAddressCity())
+                        .addressCountry(orderDTO.getAddressCountry())
+                        .addressStreet(orderDTO.getAddressStreet())
+                        .orderDetails(registerOrderedProducts(orderDTO.getOrderedProducts(), true))
+                        .shippedFrom(locationsForShippingProducts)
+                        .createdAt(localDateTime)
+                        .build();
 
-            List<OrderDetail> crtOrderDetails = createNewOrder.getOrderDetails();
-            for (OrderDetail orderDetail : crtOrderDetails) {
-                orderDetail.setOrder(createNewOrder);
+                List<OrderDetail> crtOrderDetails = createNewOrder.getOrderDetails();
+                for (OrderDetail orderDetail : crtOrderDetails) {
+                    orderDetail.setOrder(createNewOrder);
+                }
+                orderRepository.save(createNewOrder);
+                newOrder = orderMapper.orderToOrderDto(createNewOrder);
+                return newOrder;
+            } else {
+                throw new ClientIsNotRegistered("Client is not registered in the system!");
             }
-            orderRepository.save(createNewOrder);
-            newOrder = orderMapper.orderToOrderDto(createNewOrder);
-            return newOrder;
         } else {
             throw new ProductsCantBeShipped("No location to take products from");
         }
@@ -66,9 +72,8 @@ public class OrderService {
     public Set<Location> getShippingLocations(List<StockDTO> stocks) {
         Set<Location> resultLocationsForShipping = new HashSet<>();
         for (StockDTO crtStock : stocks) {
-            if (!resultLocationsForShipping.contains(locationRepository.findById(crtStock.getLocation_id()).get())) {
-                resultLocationsForShipping.add(locationRepository.findById(crtStock.getLocation_id()).get());
-            }
+            Optional<Location> crtStockLocation = locationRepository.findById(crtStock.getLocation_id());
+            crtStockLocation.ifPresent(resultLocationsForShipping::add);
         }
         return resultLocationsForShipping;
 
@@ -79,17 +84,18 @@ public class OrderService {
         OrderDetail crtOrderDetail = null;
         Optional<ProductDTO> productCheck;
         for (OrderDetailDTO productInfo : productDetails) {
-            productCheck = Optional.ofNullable(productMapper.productToProductDTO(productRepository.findById(productInfo.getProductId()).get()));
-            if (productCheck.isPresent()) {
-                if (saveData == true) {
-                    crtOrderDetail = orderDetailsRepository.save(orderDetailMapper.orderDetailDTOToOrderDetail(productInfo));
-                    orderDetails.add(crtOrderDetail);
-                } else {
-
+            Optional<Product> orderedProduct = productRepository.findById(productInfo.getProductId());
+            if (orderedProduct.isPresent()) {
+                productCheck = Optional.ofNullable(productMapper.productToProductDTO(orderedProduct.get()));
+                if (productCheck.isPresent()) {
+                    if (saveData) {
+                        crtOrderDetail = orderDetailsRepository.save(orderDetailMapper.orderDetailDTOToOrderDetail(productInfo));
+                        orderDetails.add(crtOrderDetail);
+                    }
+                    orderDetails.add(orderDetailMapper.orderDetailDTOToOrderDetail(productInfo));
                 }
-                orderDetails.add(orderDetailMapper.orderDetailDTOToOrderDetail(productInfo));
             } else {
-                productCheck = null;
+                throw new ProductNotFoundException("Product not found!");
             }
         }
         return orderDetails;

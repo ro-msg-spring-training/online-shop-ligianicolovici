@@ -8,6 +8,7 @@ import ro.msg.learning.shop.entities.Stock;
 import ro.msg.learning.shop.exceptions.ProductsCantBeShipped;
 import ro.msg.learning.shop.repositories.StockRepository;
 import ro.msg.learning.shop.services.StockService;
+import ro.msg.learning.shop.util.LocationFormatMapQuest;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -24,7 +25,7 @@ public class MostAbundantStrategy implements StrategyChoiceInterface {
 
 
     @Override
-    public List<StockDTO> implementStrategy(List<OrderDetailDTO> orderDetailDTOList) {
+    public List<StockDTO> implementStrategy(List<OrderDetailDTO> orderDetailDTOList, LocationFormatMapQuest deliveryAddress) {
 
         List<StockDTO> resultedStocks = new ArrayList<>();
 

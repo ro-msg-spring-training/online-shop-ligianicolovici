@@ -161,7 +161,7 @@ public class ShopApplicationUnitTests {
                 new OrderDetailDTO(10, 2)
         );
 
-        resultedStock = strategyConfiguration.decideStrategy().implementStrategy(orderDetailDTOS);
+        resultedStock = strategyConfiguration.decideStrategy().implementStrategy(orderDetailDTOS,null);
         Assert.assertEquals(resultedStock.get(0).getLocation_id(), Optional.of(10).get());
 
     }
@@ -179,7 +179,7 @@ public class ShopApplicationUnitTests {
                 new OrderDetailDTO(10, 2),
                 new OrderDetailDTO(4, 2)
         );
-        strategyConfiguration.decideStrategy().implementStrategy(orderDetailDTOS);
+        strategyConfiguration.decideStrategy().implementStrategy(orderDetailDTOS,null);
     }
 
 

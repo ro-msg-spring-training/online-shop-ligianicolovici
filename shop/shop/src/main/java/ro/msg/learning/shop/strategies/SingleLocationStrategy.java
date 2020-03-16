@@ -10,6 +10,7 @@ import ro.msg.learning.shop.exceptions.ProductsCantBeShipped;
 import ro.msg.learning.shop.repositories.LocationRepository;
 import ro.msg.learning.shop.repositories.StockRepository;
 import ro.msg.learning.shop.services.StockService;
+import ro.msg.learning.shop.util.LocationFormatMapQuest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,7 @@ public class SingleLocationStrategy implements StrategyChoiceInterface {
 
 
     @Override
-    public List<StockDTO> implementStrategy(List<OrderDetailDTO> orderDetailDTOList) {
+    public List<StockDTO> implementStrategy(List<OrderDetailDTO> orderDetailDTOList, LocationFormatMapQuest deliveryAddress) {
         List<Location> allLocations = locationRepository.findAll();
         List<StockDTO> resultStockList = new ArrayList<>();
 

@@ -20,17 +20,16 @@ insert into product_category (description, name) values ('Pubiotomy to assist de
 insert into product_category (description, name) values ('Cl red-int fix metat/tar', 'Daltfresh');
 insert into product_category (description, name) values ('Exc of accessory spleen', 'Matsoft');
 
-insert into location (address_city, address_country, address_street, name) values ('Fīrūzābād', 'Iran', '9 Shasta Park', 'Wordify');
-insert into location (address_city, address_country, address_street, name) values ('Ipoti', 'Nigeria', '26566 Bluejay Center', 'Photolist');
-insert into location (address_city, address_country, address_street, name) values ('Piškorevci', 'Croatia', '506 Mitchell Court', 'Skinte');
-insert into location (address_city, address_country, address_street, name) values ('Марино', 'Macedonia', '578 Spaight Trail', 'Jaxspan');
-insert into location (address_city, address_country, address_street, name) values ('Grębków', 'Poland', '3848 Moland Park', 'Zoomzone');
-insert into location (address_city, address_country, address_street, name) values ('Tujing', 'China', '10 Merry Circle', 'Quimba');
-insert into location (address_city, address_country, address_street, name) values ('Kiikala', 'Finland', '88 Randy Pass', 'Tekfly');
-insert into location (address_city, address_country, address_street, name) values ('Shixian', 'China', '8009 Pine View Plaza', 'Browseblab');
-insert into location (address_city, address_country, address_street, name) values ('Tadou', 'China', '116 Mayfield Street', 'Twitterbridge');
-insert into location (address_city, address_country, address_street, name) values ('Myronivka', 'Ukraine', '30802 West Hill', 'Yakitri');
-
+insert into location (address_city, address_country, address_street, name) values ('Firuzabad', 'IR', '9 Shasta Park', 'Wordify');
+insert into location (address_city, address_country, address_street, name) values ('Ipoti', 'NG', '26566 Bluejay Center', 'Photolist');
+insert into location (address_city, address_country, address_street, name) values ('Piskorevci', 'HR', '506 Mitchell Court', 'Skinte');
+insert into location (address_city, address_country, address_street, name) values ('Марnhо', 'MK', '578 Spaight Trail', 'Jaxspan');
+insert into location (address_city, address_country, address_street, name) values ('Grebkow', 'PL', '3848 Moland Park', 'Zoomzone');
+insert into location (address_city, address_country, address_street, name) values ('Tujing', 'CH', '10 Merry Circle', 'Quimba');
+insert into location (address_city, address_country, address_street, name) values ('Kiikala', 'FI', '88 Randy Pass', 'Tekfly');
+insert into location (address_city, address_country, address_street, name) values ('Shixian', 'CH', '8009 Pine View Plaza', 'Browseblab');
+insert into location (address_city, address_country, address_street, name) values ('Tadou', 'CH', '116 Mayfield Street', 'Twitterbridge');
+insert into location (address_city, address_country, address_street, name) values ('Myronivka', 'UA', '30802 West Hill', 'Yakitri');
 
 insert into product (image_url, description, name, price, weight, product_category_id, supplier_id) values ('http://dummyimage.com/116x125.jpg/ff4444/ffffff', 'Hypertroph osteoarthrop', 'Ralph Lauren Corporation', 56.87, 77.22, 4, 2);
 insert into product (image_url, description, name, price, weight, product_category_id, supplier_id) values ('http://dummyimage.com/125x104.jpg/cc0000/ffffff', 'No medical serv in home', 'Nuveen Select Maturities Municipal Fund', 45.63, 33.29, 2, 4);
@@ -53,9 +52,9 @@ insert into stock (quantity, location_id, product_id) values (58, 6, 10);
 insert into stock (quantity, location_id, product_id) values (99, 3, 3);
 insert into stock (quantity, location_id, product_id) values (22, 9, 4);
 insert into stock (quantity, location_id, product_id) values (20, 5, 2);
-insert into stock (quantity, location_id, product_id) values (39, 8, 8);
+insert into stock (quantity, location_id, product_id) values (39, 8, 2);
 
-insert into customer (email_address, first_name, last_name, password, username) values ('btschersich0@microsoft.com', 'Boyce', 'Tschersich', 's7DE3B', 'btschersich0');
+insert into customer (email_address, first_name, last_name, password, username) values ('btschersich0@microsoft.com', 'Boyce', 'Tschersich', 'test', 'test');
 insert into customer (email_address, first_name, last_name, password, username) values ('dbliben1@cloudflare.com', 'Desirae', 'Bliben', 'rJNnMDJrXBqg', 'dbliben1');
 insert into customer (email_address, first_name, last_name, password, username) values ('tboskell2@ebay.com', 'Thaddus', 'Boskell', 'rjKB8yJ', 'tboskell2');
 insert into customer (email_address, first_name, last_name, password, username) values ('kcassidy3@tinyurl.com', 'Keary', 'Cassidy', 'mqUvYMuEvi', 'kcassidy3');

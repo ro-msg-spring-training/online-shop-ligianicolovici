@@ -33,7 +33,7 @@ public class HttpMessageConverterCSV extends AbstractGenericHttpMessageConverter
     @Override
     protected void writeInternal(Object o, Type type, HttpOutputMessage httpOutputMessage) throws HttpMessageNotWritableException, IOException {
 
-        List<Object> arrayList;
+        List<Object> arrayList = new ArrayList<>();
 
         if (o instanceof List)
             arrayList = new ArrayList<>((ArrayList<Object>) o);
