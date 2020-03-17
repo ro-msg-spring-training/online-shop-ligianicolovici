@@ -32,18 +32,18 @@ public class Order {
     private String addressStreet;
 
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "order_location",
             joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "location_id"))
-    @Fetch(value = FetchMode.SELECT)
+    @Fetch(value = FetchMode.SELECT )
     private Set<Location> shippedFrom;
 
     @ManyToOne
     private Customer customer;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @ToString.Exclude
     private List<OrderDetail> orderDetails;
 

@@ -38,6 +38,7 @@ public class HttpMessageConverterCSV extends AbstractGenericHttpMessageConverter
         if (o instanceof List)
             arrayList = new ArrayList<>((ArrayList<Object>) o);
         else if (o instanceof LinkedHashMap) {
+            System.out.println("x");
             throw new CSVExporterException("Couldn't export results as csv file");
         } else {
             arrayList = Collections.singletonList(o);

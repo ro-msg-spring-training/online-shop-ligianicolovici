@@ -33,7 +33,7 @@ public class Location {
     @ToString.Exclude
     private List<Stock> stocks;
 
-    @ManyToMany(mappedBy = "shippedFrom")
+    @ManyToMany(mappedBy = "shippedFrom", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @Fetch(value = FetchMode.SELECT)
     private Set<Order> orders;
 

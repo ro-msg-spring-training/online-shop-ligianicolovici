@@ -20,7 +20,7 @@ public class OrderDetail {
     private Integer id;
     private Integer quantity;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Order order;
 
     @ManyToOne
