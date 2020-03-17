@@ -8,6 +8,5 @@ import java.util.Optional;
 
 public interface OrderDetailsRepository extends JpaRepository<OrderDetail, Integer> {
     public List<OrderDetail> findAllByOrder_Id(Integer orderId);
-
     public Optional<OrderDetail> findByProduct_Id(Integer productID);
 }

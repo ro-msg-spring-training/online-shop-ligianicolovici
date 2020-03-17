@@ -1,8 +1,6 @@
 package ro.msg.learning.shop.scheduler;
 
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import ro.msg.learning.shop.dtos.OrderDTOScheduler;
@@ -33,9 +31,6 @@ public class ScheduledTask {
     private final ProductRepository productRepository;
     private final RevenueRepository revenueRepository;
     private final RevenueMapper revenueMapper;
-
-    private static final Logger log = LoggerFactory.getLogger(ScheduledTask.class);
-
 
     @Scheduled(cron = "0 0 19 * * *")
     public void reportOnTodayRevenue() {
@@ -72,7 +67,6 @@ public class ScheduledTask {
                     .location(locationRepository.findById(entry.getKey()).get())
                     .build();
             Revenue saved = revenueRepository.save(revenueToRegister);
-            log.info(revenueMapper.revenueToRevenueDTO(saved).toString());
         }
     }
 }

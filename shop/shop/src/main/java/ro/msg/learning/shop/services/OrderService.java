@@ -49,7 +49,7 @@ public class OrderService {
                         .addressCity(orderDTO.getAddressCity())
                         .addressCountry(orderDTO.getAddressCountry())
                         .addressStreet(orderDTO.getAddressStreet())
-                        .orderDetails( registerOrderedProducts(orderDTO.getOrderedProducts(), true))
+                        .orderDetails(registerOrderedProducts(orderDTO.getOrderedProducts(), true))
                         .shippedFrom(locationsForShippingProducts)
                         .createdAt(localDateTime)
                         .build();
@@ -91,7 +91,7 @@ public class OrderService {
                     if (saveData) {
                         crtOrderDetail = orderDetailsRepository.save(orderDetailMapper.orderDetailDTOToOrderDetail(productInfo));
                         orderDetails.add(crtOrderDetail);
-                    }else{
+                    } else {
                         orderDetails.add(orderDetailMapper.orderDetailDTOToOrderDetail(productInfo));
                     }
                 }

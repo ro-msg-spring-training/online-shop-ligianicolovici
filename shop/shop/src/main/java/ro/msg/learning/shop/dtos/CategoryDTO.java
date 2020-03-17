@@ -12,7 +12,6 @@ import java.io.Serializable;
 @Builder
 @AllArgsConstructor
 public class CategoryDTO implements Serializable {
-
     private String name;
     private String description;
 }
