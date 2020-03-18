@@ -10,7 +10,6 @@ import ro.msg.learning.shop.dtos.StockDTO;
 import ro.msg.learning.shop.services.StockService;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -19,9 +18,9 @@ import java.util.List;
 public class StockController {
     private final StockService stockService;
 
-    @GetMapping(value = "/{location_id}", produces = {"text/csv"})
-    public List<StockDTO> getStocksToCSV(@PathVariable("location_id") Integer location_id, HttpServletResponse response) throws IOException {
+    @GetMapping(value = "/{locationId}", produces = {"text/csv"})
+    public List<StockDTO> getStocksToCSV(@PathVariable("locationId") Integer locationId, HttpServletResponse response) {
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=stocks.csv");
-        return stockService.exportStocksToCSV(location_id);
+        return stockService.exportStocksToCSV(locationId);
     }
 }

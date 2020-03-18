@@ -103,8 +103,8 @@ public class ShopApplicationUnitTests {
 
 
         mockStockDtoList = new ArrayList<>();
-        mockStockDtoList.add(StockDTO.builder().product_id(4).quantity(2).location_id(mockLocationId).build());
-        mockStockDtoList.add(StockDTO.builder().product_id(5).quantity(3).location_id(mockLocationId).build());
+        mockStockDtoList.add(StockDTO.builder().productId(4).quantity(2).locationId(mockLocationId).build());
+        mockStockDtoList.add(StockDTO.builder().productId(5).quantity(3).locationId(mockLocationId).build());
         mockProductList = new ArrayList<>();
         mockSupplier = new Supplier(1, "supplier", mockProductList);
         mockCategory = new ProductCategory(1, "category", "categoryDescription", mockProductList);
@@ -123,7 +123,7 @@ public class ShopApplicationUnitTests {
     @Test
     public void exportStocksToCsvSuccess() throws Exception {
         Mockito.when((locationRepository.findById(anyInt()))).thenReturn(mockLocationOptional);
-        Mockito.when((stockRepository.findAllByLocation_Id(anyInt()))).thenReturn(mockStockList);
+        Mockito.when((stockRepository.findAllByLocationId(anyInt()))).thenReturn(mockStockList);
         Mockito.when((stockMapper.stockListToStockListDTO(anyList()))).thenReturn(mockStockDtoList);
 
         Assert.assertEquals(stockService.exportStocksToCSV(mockLocationId), mockStockDtoList);
@@ -155,14 +155,14 @@ public class ShopApplicationUnitTests {
         Mockito.when((productMapper.productToProductDTO(any(Product.class)))).thenReturn(mockProductDTO);
         Mockito.when((orderDetailMapper.orderDetailListToOrderDetailDTOList(anyList()))).thenReturn(mockOrderDetailDTOS);
         Mockito.when((locationRepository.findAll())).thenReturn(allMockLocations);
-        Mockito.when((stockRepository.findAllByLocation_Id(anyInt()))).thenReturn(mockStrategyStockList);
+        Mockito.when((stockRepository.findAllByLocationId(anyInt()))).thenReturn(mockStrategyStockList);
 
         List<OrderDetailDTO> orderDetailDTOS = Arrays.asList(
                 new OrderDetailDTO(10, 2)
         );
 
         resultedStock = strategyConfiguration.decideStrategy().implementStrategy(orderDetailDTOS,null);
-        Assert.assertEquals(resultedStock.get(0).getLocation_id(), Optional.of(10).get());
+        Assert.assertEquals(resultedStock.get(0).getLocationId(), Optional.of(10).get());
 
     }
 
@@ -173,7 +173,7 @@ public class ShopApplicationUnitTests {
         Mockito.when((productMapper.productToProductDTO(any(Product.class)))).thenReturn(mockProductDTO);
         Mockito.when((orderDetailMapper.orderDetailListToOrderDetailDTOList(anyList()))).thenReturn(mockOrderDetailDTOS);
         Mockito.when((locationRepository.findAll())).thenReturn(allMockLocations);
-        Mockito.when((stockRepository.findAllByLocation_Id(anyInt()))).thenReturn(mockStrategyStockList);
+        Mockito.when((stockRepository.findAllByLocationId(anyInt()))).thenReturn(mockStrategyStockList);
 
         List<OrderDetailDTO> orderDetailDTOS = Arrays.asList(
                 new OrderDetailDTO(10, 2),

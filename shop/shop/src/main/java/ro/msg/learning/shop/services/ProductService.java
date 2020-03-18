@@ -1,6 +1,7 @@
 package ro.msg.learning.shop.services;
 
 import lombok.RequiredArgsConstructor;
+import org.jboss.logging.Logger;
 import org.springframework.stereotype.Service;
 import ro.msg.learning.shop.dtos.CategoryDTO;
 import ro.msg.learning.shop.dtos.ProductDTO;
@@ -14,13 +15,14 @@ import ro.msg.learning.shop.repositories.ProductRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
     private final CategoryRepository productCategoryRepo;
+
+    private static final Logger LOGGER = Logger.getLogger(ProductService.class);
 
     public ProductDTO createProduct(ProductDTO productDto) {
         Product product = Product.builder()
@@ -54,7 +56,7 @@ public class ProductService {
         ProductDTO resultedProduct = null;
         Optional<Product> productToUpdate = productRepository.findById(id);
         if (productToUpdate.isPresent()) {
-            Product updated = productRepository.findById(id).get();
+            Product updated = productToUpdate.get();
             updated.setName(updatedProduct.getName());
             updated.setPrice(updatedProduct.getPrice());
             updated.setDescription(updatedProduct.getDescription());
@@ -68,7 +70,7 @@ public class ProductService {
     }
 
     public void deleteProductById(Integer id) {
-        productRepository.deleteById(id);
+           productRepository.deleteById(id);
     }
 
     public List<ProductDTO> getAllProducts() {
@@ -83,7 +85,7 @@ public class ProductService {
                 }
             }
         } catch (ProductNotFoundException ex) {
-            System.out.println(ex.getMessage());
+           LOGGER.info(ex.getMessage());
         }
         return existingProducts;
 

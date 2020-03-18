@@ -72,7 +72,7 @@ public class OrderService {
     public Set<Location> getShippingLocations(List<StockDTO> stocks) {
         Set<Location> resultLocationsForShipping = new HashSet<>();
         for (StockDTO crtStock : stocks) {
-            Optional<Location> crtStockLocation = locationRepository.findById(crtStock.getLocation_id());
+            Optional<Location> crtStockLocation = locationRepository.findById(crtStock.getLocationId());
             crtStockLocation.ifPresent(resultLocationsForShipping::add);
         }
         return resultLocationsForShipping;

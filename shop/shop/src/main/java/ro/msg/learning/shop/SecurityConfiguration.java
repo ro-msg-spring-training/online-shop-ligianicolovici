@@ -1,5 +1,6 @@
 package ro.msg.learning.shop;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,6 +10,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import ro.msg.learning.shop.entities.Customer;
+import ro.msg.learning.shop.repositories.CustomerRepository;
 import ro.msg.learning.shop.services.CustomerService;
 
 @Configuration
@@ -18,19 +21,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Value("${security.option}")
     private String securityOption;
 
+    @Override
     @Bean
     public UserDetailsService userDetailsService() {
         return new CustomerService();
     }
 
-    ;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    ;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {

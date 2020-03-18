@@ -12,28 +12,25 @@ import ro.msg.learning.shop.exceptions.CSVExporterException;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
-public class HttpMessageConverterCSV extends AbstractGenericHttpMessageConverter {
+public class HttpMessageConverterCSV extends AbstractGenericHttpMessageConverter<Object>{
 
-    private final CSVConversion csvConverter;
+    protected final CSVConversion<Object>csvConverter;
 
     public HttpMessageConverterCSV() {
         super(new MediaType("text", "csv"));
 
-        this.csvConverter = new CSVConversion();
+        this.csvConverter = new CSVConversion<>();
     }
 
 
     @Override
     protected void writeInternal(Object o, Type type, HttpOutputMessage httpOutputMessage) throws HttpMessageNotWritableException, IOException {
 
-        List<Object> arrayList = new ArrayList<>();
+        List<Object> arrayList;
 
         if (o instanceof List)
             arrayList = new ArrayList<>((ArrayList<Object>) o);
@@ -43,7 +40,7 @@ public class HttpMessageConverterCSV extends AbstractGenericHttpMessageConverter
             arrayList = Collections.singletonList(o);
         }
 
-        csvConverter.toCsv(arrayList.get(0).getClass(), arrayList, httpOutputMessage.getBody());
+        csvConverter.toCsv((Class<Object>) arrayList.get(0).getClass(), arrayList, httpOutputMessage.getBody());
     }
 
     @Override

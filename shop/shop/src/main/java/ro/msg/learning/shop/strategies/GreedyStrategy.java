@@ -5,6 +5,7 @@ import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import ro.msg.learning.shop.dtos.OrderDetailDTO;
 import ro.msg.learning.shop.dtos.StockDTO;
@@ -23,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Component
 @RequiredArgsConstructor
 public class GreedyStrategy implements StrategyChoiceInterface {
 
@@ -48,7 +50,7 @@ public class GreedyStrategy implements StrategyChoiceInterface {
 
         for (OrderDetailDTO demandedProduct : orderDetailDTOList) {
             List<LocationFormatMapQuest> locationsWithSuitableStocks = new ArrayList<>();
-            List<Stock> stocksContainingDemandedProduct = stockRepository.findAllByProduct_Id(demandedProduct.getProductId());
+            List<Stock> stocksContainingDemandedProduct = stockRepository.findAllByProductId(demandedProduct.getProductId());
 
             JSONObject postData = new JSONObject();
             JSONArray locationsJSON = new JSONArray();
@@ -113,11 +115,11 @@ public class GreedyStrategy implements StrategyChoiceInterface {
         assert result != null;
         StockDTO targetStock = StockDTO.builder()
                 .quantity(demandedProduct.getQuantity())
-                .location_id(result.getLocation().getId())
-                .product_id(demandedProduct.getProductId())
+                .locationId(result.getLocation().getId())
+                .productId(demandedProduct.getProductId())
                 .build();
 
-        stockService.updateStock(demandedProduct.getProductId(), targetStock.getLocation_id(), result, demandedProduct.getQuantity());
+        stockService.updateStock( result, demandedProduct.getQuantity());
 
         return targetStock;
     }
@@ -126,11 +128,11 @@ public class GreedyStrategy implements StrategyChoiceInterface {
 
         StockDTO targetStock = StockDTO.builder()
                 .quantity(demandedProduct.getQuantity())
-                .location_id(stocksContainingDemandedProduct.get(0).getLocation().getId())
-                .product_id(demandedProduct.getProductId())
+                .locationId(stocksContainingDemandedProduct.get(0).getLocation().getId())
+                .productId(demandedProduct.getProductId())
                 .build();
 
-        stockService.updateStock(demandedProduct.getProductId(), targetStock.getLocation_id(), stocksContainingDemandedProduct.get(0), demandedProduct.getQuantity());
+        stockService.updateStock( stocksContainingDemandedProduct.get(0), demandedProduct.getQuantity());
         return targetStock;
     }
 }

@@ -12,7 +12,7 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    @RequestMapping(method = RequestMethod.POST, produces = {"application/json"})
+    @PostMapping(produces = {"application/json"})
     @ResponseBody
     public OrderDTO createNewOrder(@RequestBody OrderDTO orderDTO) {
         return orderService.createOrder(orderDTO);

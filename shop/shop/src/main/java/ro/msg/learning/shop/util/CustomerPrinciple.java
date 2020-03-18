@@ -7,14 +7,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import ro.msg.learning.shop.entities.Customer;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Optional;
 
 public class CustomerPrinciple implements UserDetails {
-    private Customer customer;
-    public CustomerPrinciple(Optional<Customer> customer){
+    private transient Customer customer= null;
+
+    public CustomerPrinciple(Optional<Customer> optionalCustomer){
         PasswordEncoder passwordEncoder= new BCryptPasswordEncoder();
-        if(customer.isPresent()){
-            this.customer= customer.get();
+        if(optionalCustomer.isPresent()){
+            this.customer= optionalCustomer.get();
             this.customer.setPassword(passwordEncoder.encode(this.customer.getPassword()));
         }else{
             this.customer= null;
@@ -23,7 +25,7 @@ public class CustomerPrinciple implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return Collections.EMPTY_LIST;
     }
 
     @Override

@@ -1,6 +1,5 @@
 package ro.msg.learning.shop.services;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,7 +11,6 @@ import ro.msg.learning.shop.util.CustomerPrinciple;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class CustomerService implements UserDetailsService {
 
     @Autowired
@@ -28,5 +26,4 @@ public class CustomerService implements UserDetailsService {
         }
     }
 }
-
 

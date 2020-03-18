@@ -11,7 +11,6 @@ import ro.msg.learning.shop.mappers.StockMapper;
 import ro.msg.learning.shop.repositories.LocationRepository;
 import ro.msg.learning.shop.repositories.StockRepository;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,18 +22,17 @@ public class StockService {
     private final LocationRepository locationRepository;
     private final StockMapper stockMapper;
 
-    public void updateStock(Integer productID, Integer locationID, Stock stockToUpdate, Integer quantityTaken) {
-        Integer oldQuantity = stockToUpdate.getQuantity();
+    public void updateStock(Stock stockToUpdate, Integer quantityTaken) {
         Integer newQuantity = stockToUpdate.getQuantity() - quantityTaken;
         stockToUpdate.setQuantity(newQuantity);
         stockRepository.save(stockToUpdate);
     }
 
-    public List<StockDTO> exportStocksToCSV(Integer locationID) throws IOException {
+    public List<StockDTO> exportStocksToCSV(Integer locationID) {
         List<StockDTO> resultedStocks;
         Optional<Location> requestedLocation = locationRepository.findById(locationID);
         if (requestedLocation.isPresent()) {
-            resultedStocks = stockMapper.stockListToStockListDTO(stockRepository.findAllByLocation_Id(locationID));
+            resultedStocks = stockMapper.stockListToStockListDTO(stockRepository.findAllByLocationId(locationID));
             return resultedStocks;
 
         } else throw new LocationNotFoundException("Location does not exist!");

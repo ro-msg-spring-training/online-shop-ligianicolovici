@@ -13,8 +13,8 @@ import java.io.Serializable;
 @Data
 
 public class StockDTO implements Serializable {
-    private Integer location_id;
-    private Integer product_id;
+    private Integer locationId;
+    private Integer productId;
     private Integer quantity;
 
 

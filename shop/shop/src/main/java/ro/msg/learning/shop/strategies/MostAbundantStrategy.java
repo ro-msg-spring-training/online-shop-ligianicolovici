@@ -2,6 +2,7 @@ package ro.msg.learning.shop.strategies;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ro.msg.learning.shop.dtos.OrderDetailDTO;
 import ro.msg.learning.shop.dtos.StockDTO;
 import ro.msg.learning.shop.entities.Stock;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+@Component
 @RequiredArgsConstructor
 public class MostAbundantStrategy implements StrategyChoiceInterface {
 
@@ -30,17 +32,17 @@ public class MostAbundantStrategy implements StrategyChoiceInterface {
         List<StockDTO> resultedStocks = new ArrayList<>();
 
         for (OrderDetailDTO demandedProduct : orderDetailDTOList) {
-            List<Stock> stocksContainingDemandedProduct = stockRepository.findAllByProduct_Id(demandedProduct.getProductId());
+            List<Stock> stocksContainingDemandedProduct = stockRepository.findAllByProductId(demandedProduct.getProductId());
 
             Stock mostAbundant = stocksContainingDemandedProduct.stream().max(Comparator.comparing(Stock::getQuantity)).get();
             if (demandedProduct.getQuantity() <= mostAbundant.getQuantity()) {
                 StockDTO targetStock = StockDTO.builder()
                         .quantity(demandedProduct.getQuantity())
-                        .location_id(mostAbundant.getLocation().getId())
-                        .product_id(demandedProduct.getProductId())
+                        .locationId(mostAbundant.getLocation().getId())
+                        .productId(demandedProduct.getProductId())
                         .build();
                 resultedStocks.add(targetStock);
-                stockService.updateStock(demandedProduct.getProductId(), mostAbundant.getLocation().getId(), mostAbundant, demandedProduct.getQuantity());
+                stockService.updateStock(mostAbundant, demandedProduct.getQuantity());
                 if (resultedStocks.size() == orderDetailDTOList.size()) {
                     return resultedStocks;
                 }

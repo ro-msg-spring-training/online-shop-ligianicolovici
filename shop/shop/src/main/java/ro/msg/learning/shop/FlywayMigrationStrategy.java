@@ -10,7 +10,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class FlywayMigrationStrategy {
     @RunWith(SpringRunner.class)
     @SpringBootTest
-    public class ManualFlywayMigrationIntegrationTest {
+    public static class ManualFlywayMigrationIntegrationTest {
 
         @Autowired
         private Flyway flyway;

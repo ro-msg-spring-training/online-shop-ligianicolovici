@@ -103,7 +103,7 @@ public class ShopApplicationIntegrationTests {
         Assert.assertNotNull(createdOrder);
         Assert.assertEquals(createdOrder.getOrderedProducts().get(0).getProductId(), Optional.of(10).get());
 
-        List<OrderDetail> details = orderDetailRepository.findAllByOrder_Id(createdOrder.getOrderID());
+        List<OrderDetail> details = orderDetailRepository.findAllByOrderId(createdOrder.getOrderID());
 
         Assert.assertEquals(details.get(0).getQuantity(), Optional.of(2).get());
         Assert.assertEquals(details.get(0).getProduct().getId(), Optional.of(10).get());

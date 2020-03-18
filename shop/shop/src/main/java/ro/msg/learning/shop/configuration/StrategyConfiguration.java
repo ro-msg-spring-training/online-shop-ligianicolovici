@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import ro.msg.learning.shop.exceptions.ProductsCantBeShipped;
 import ro.msg.learning.shop.strategies.*;
 
+import java.util.Objects;
+
 @Configuration
 public class StrategyConfiguration {
 
@@ -30,14 +32,12 @@ public class StrategyConfiguration {
                 }
             }
         }
-        throw new ProductsCantBeShipped("Can't get");
+        throw new ProductsCantBeShipped("Can't get place your order. We are sorry!");
     }
 
     public boolean testIfValueIsValid() {
         for (StrategyEnum enumItem : StrategyEnum.values()) {
-            if (enumItem.name().equals(strategy.toUpperCase())) {
-                return true;
-            }
+            if (Objects.equals(strategy.toUpperCase(), enumItem.name())) return true;
         }
         return false;
     }

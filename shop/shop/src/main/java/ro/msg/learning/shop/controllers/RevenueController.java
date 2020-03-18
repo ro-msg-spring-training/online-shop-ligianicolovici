@@ -15,10 +15,10 @@ public class RevenueController {
 
     private final RevenueService revenueService;
 
-    @RequestMapping(method = RequestMethod.GET, value = "/{givenDate}",produces = {"application/json"})
+    @GetMapping(value = "/{givenDate}", produces = {"application/json"})
     @ResponseBody
     public List<RevenueDTO> getRevenueListForGivenDate(@PathVariable String givenDate) {
-        LocalDate date= LocalDate.parse(givenDate);
+        LocalDate date = LocalDate.parse(givenDate);
         return revenueService.getAllRevenueForGivenDate(date);
     }
 
