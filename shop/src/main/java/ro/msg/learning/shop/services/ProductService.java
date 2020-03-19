@@ -15,13 +15,13 @@ import ro.msg.learning.shop.repositories.ProductRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
     private final CategoryRepository productCategoryRepo;
-
     private static final Logger LOGGER = Logger.getLogger(ProductService.class);
 
     public ProductDTO createProduct(ProductDTO productDto) {
@@ -70,7 +70,7 @@ public class ProductService {
     }
 
     public void deleteProductById(Integer id) {
-           productRepository.deleteById(id);
+        productRepository.deleteById(id);
     }
 
     public List<ProductDTO> getAllProducts() {
@@ -85,7 +85,7 @@ public class ProductService {
                 }
             }
         } catch (ProductNotFoundException ex) {
-           LOGGER.info(ex.getMessage());
+            LOGGER.info(ex.getMessage());
         }
         return existingProducts;
 

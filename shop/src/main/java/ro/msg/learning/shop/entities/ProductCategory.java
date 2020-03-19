@@ -22,4 +22,6 @@ public class ProductCategory {
     @OneToMany(mappedBy = "productCategory", cascade = CascadeType.ALL)
     @ToString.Exclude
     private List<Product> products;
+
+
 }
