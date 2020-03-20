@@ -1,4 +1,4 @@
-package ro.msg.learning.shop.converter;
+package ro.msg.learning.shop.converters;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpInputMessage;
@@ -12,13 +12,16 @@ import ro.msg.learning.shop.exceptions.CSVExporterException;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class HttpMessageConverterCSV extends AbstractGenericHttpMessageConverter<Object>{
+public class HttpMessageConverterCSV extends AbstractGenericHttpMessageConverter<Object> {
 
-    protected final CSVConversion<Object>csvConverter;
+    protected final CSVConversion<Object> csvConverter;
 
     public HttpMessageConverterCSV() {
         super(new MediaType("text", "csv"));

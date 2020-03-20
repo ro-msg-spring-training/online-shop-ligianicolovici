@@ -1,5 +1,4 @@
-package ro.msg.learning.shop.util;
-
+package ro.msg.learning.shop.utils;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,5 +15,4 @@ import java.util.List;
 public class MapQuestResponse {
     private boolean allToAll;
     private List<BigDecimal> distance;
-
 }

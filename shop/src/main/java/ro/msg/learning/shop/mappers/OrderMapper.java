@@ -18,27 +18,25 @@ public class OrderMapper {
         return OrderDTO.builder()
                 .orderID(order.getId())
                 .userID(order.getCustomer().getId())
-                .addressCity(order.getAddressCity())
-                .addressCountry(order.getAddressCountry())
-                .addressStreet(order.getAddressStreet())
+                .address(order.getAddress())
                 .orderedProducts(orderDetailMapper.orderDetailListToOrderDetailDTOList(order.getOrderDetails()))
                 .build();
     }
+
     public OrderDTO orderToOrderDtoSCH(Order order) {
         return OrderDTO.builder()
                 .orderID(order.getId())
                 .userID(order.getCustomer().getId())
-                .addressCity(order.getAddressCity())
-                .addressCountry(order.getAddressCountry())
-                .addressStreet(order.getAddressStreet())
+                .address(order.getAddress())
                 .build();
     }
-    public List<OrderDTO> orderListToOrderListDTO(List<Order>orderList){
-        List<OrderDTO>result= new ArrayList<>();
-        for(Order order:orderList){
+
+    public List<OrderDTO> orderListToOrderListDTO(List<Order> orderList) {
+        List<OrderDTO> result = new ArrayList<>();
+        for (Order order : orderList) {
             result.add(orderToOrderDtoSCH(order));
         }
-        return  result;
+        return result;
     }
 
 }

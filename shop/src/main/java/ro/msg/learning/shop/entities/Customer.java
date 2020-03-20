@@ -11,7 +11,6 @@ import java.util.List;
 @Entity
 @Builder
 @Table(name = "customer")
-
 public class Customer {
     @Id
     @Column(unique = true)

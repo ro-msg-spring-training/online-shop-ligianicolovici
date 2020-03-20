@@ -9,8 +9,8 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.util.ReflectionTestUtils;
-import ro.msg.learning.shop.configuration.StrategyConfiguration;
-import ro.msg.learning.shop.converter.CSVConversion;
+import ro.msg.learning.shop.configurations.StrategyConfiguration;
+import ro.msg.learning.shop.converters.CSVConversion;
 import ro.msg.learning.shop.dtos.CategoryDTO;
 import ro.msg.learning.shop.dtos.OrderDetailDTO;
 import ro.msg.learning.shop.dtos.ProductDTO;
@@ -24,6 +24,7 @@ import ro.msg.learning.shop.mappers.StockMapper;
 import ro.msg.learning.shop.repositories.*;
 import ro.msg.learning.shop.services.OrderService;
 import ro.msg.learning.shop.services.StockService;
+import ro.msg.learning.shop.strategies.GreedyStrategy;
 import ro.msg.learning.shop.strategies.MostAbundantStrategy;
 import ro.msg.learning.shop.strategies.SingleLocationStrategy;
 
@@ -43,6 +44,7 @@ public class ShopApplicationUnitTests {
 
     private static final String CSV = "location_id,product_id,quantity\n13,6,31\n";
     private static final String mockStrategy = "single_location";
+
     public StockRepository stockRepository = mock(StockRepository.class);
     public LocationRepository locationRepository = mock(LocationRepository.class);
     public StockMapper stockMapper = mock(StockMapper.class);
@@ -53,7 +55,8 @@ public class ShopApplicationUnitTests {
     public ProductRepository productRepository = mock(ProductRepository.class);
     public ProductMapper productMapper = mock(ProductMapper.class);
     public CustomerRepository customerRepository = mock(CustomerRepository.class);
-    int mockLocationId;
+    public Integer mockLocationId;
+
     Optional<Location> mockLocationOptional;
     List<Location> mockAllLocations = new ArrayList<>();
     List<Stock> mockStockList;
@@ -69,14 +72,17 @@ public class ShopApplicationUnitTests {
     ProductCategory mockCategory;
     List<Product> mockProductList;
     Supplier mockSupplier;
+
     @InjectMocks
     private StockDTO stockDTO;
     private CSVConversion<StockDTO> csvConversion;
     private StockService stockService = new StockService(stockRepository, locationRepository, stockMapper);
-    private StrategyConfiguration strategyConfiguration = new StrategyConfiguration();
+    private SingleLocationStrategy mockSingleLocationStrategy = new SingleLocationStrategy(stockRepository, locationRepository, stockService);
+    private MostAbundantStrategy mockMostAbundantStrategy = new MostAbundantStrategy(stockRepository, stockService);
+    private GreedyStrategy mockClosestLocationStrategy = new GreedyStrategy(stockRepository, stockService, stockMapper, orderRepository);
+    private StrategyConfiguration strategyConfiguration = new StrategyConfiguration(mockSingleLocationStrategy, mockMostAbundantStrategy, mockClosestLocationStrategy);
     private OrderService orderService = new OrderService(orderRepository, orderMapper, orderDetailsRepository, orderDetailMapper, productRepository, productMapper, customerRepository, strategyConfiguration, locationRepository);
-    private SingleLocationStrategy mockSingleLocationStrategy = new SingleLocationStrategy();
-    private MostAbundantStrategy mockMostAbundantStrategy = new MostAbundantStrategy();
+
 
     @Before
     public void beforeEachTest() {
@@ -97,9 +103,7 @@ public class ShopApplicationUnitTests {
         mockOrderDetails = Collections.emptyList();
         mockLocationOptional = Optional.of(Location.builder().id(mockLocationId).build());
         allMockLocations = new ArrayList<>();
-        if (mockLocationOptional.isPresent()) {
-            allMockLocations.add(mockLocationOptional.get());
-        }
+        mockLocationOptional.ifPresent(location -> allMockLocations.add(location));
 
 
         mockStockDtoList = new ArrayList<>();
@@ -161,7 +165,7 @@ public class ShopApplicationUnitTests {
                 new OrderDetailDTO(10, 2)
         );
 
-        resultedStock = strategyConfiguration.decideStrategy().implementStrategy(orderDetailDTOS,null);
+        resultedStock = strategyConfiguration.decideStrategy().implementStrategy(orderDetailDTOS, null);
         Assert.assertEquals(resultedStock.get(0).getLocationId(), Optional.of(10).get());
 
     }
@@ -179,7 +183,7 @@ public class ShopApplicationUnitTests {
                 new OrderDetailDTO(10, 2),
                 new OrderDetailDTO(4, 2)
         );
-        strategyConfiguration.decideStrategy().implementStrategy(orderDetailDTOS,null);
+        strategyConfiguration.decideStrategy().implementStrategy(orderDetailDTOS, null);
     }
 
 

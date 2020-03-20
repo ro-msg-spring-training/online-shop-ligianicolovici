@@ -10,21 +10,22 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import ro.msg.learning.shop.entities.Customer;
-import ro.msg.learning.shop.repositories.CustomerRepository;
 import ro.msg.learning.shop.services.CustomerService;
 
 @Configuration
+@RequiredArgsConstructor
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Value("${security.option}")
     private String securityOption;
 
+    private final CustomerService customerService;
+
     @Override
     @Bean
     public UserDetailsService userDetailsService() {
-        return new CustomerService();
+        return customerService;
     }
 
 

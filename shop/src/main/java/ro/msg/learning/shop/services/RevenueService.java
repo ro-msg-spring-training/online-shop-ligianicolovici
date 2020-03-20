@@ -17,6 +17,5 @@ public class RevenueService {
 
     public List<RevenueDTO> getAllRevenueForGivenDate(LocalDate date) {
         return revenueMapper.revenueListToRevenueDTOList(revenueRepository.findAllByDate(date));
-
     }
 }

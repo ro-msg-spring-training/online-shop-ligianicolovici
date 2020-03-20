@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/revenue")
+@RequestMapping(value = "/revenues")
 public class RevenueController {
 
     private final RevenueService revenueService;

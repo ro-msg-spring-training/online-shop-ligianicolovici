@@ -3,7 +3,7 @@ package ro.msg.learning.shop.strategies;
 import org.springframework.stereotype.Component;
 import ro.msg.learning.shop.dtos.OrderDetailDTO;
 import ro.msg.learning.shop.dtos.StockDTO;
-import ro.msg.learning.shop.util.LocationFormatMapQuest;
+import ro.msg.learning.shop.utils.LocationFormatMapQuest;
 
 import java.util.List;
 

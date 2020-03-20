@@ -9,7 +9,7 @@ import java.util.List;
 
 @Component
 public class RevenueMapper {
-    public RevenueDTO revenueToRevenueDTO(Revenue revenue){
+    public RevenueDTO revenueToRevenueDTO(Revenue revenue) {
         return RevenueDTO.builder()
                 .id(revenue.getId())
                 .date(revenue.getDate())
@@ -17,9 +17,10 @@ public class RevenueMapper {
                 .locationId(revenue.getLocation().getId())
                 .build();
     }
-    public List<RevenueDTO> revenueListToRevenueDTOList(List<Revenue>revenueList){
-        List<RevenueDTO> result= new ArrayList<>();
-        for(Revenue revenue:revenueList){
+
+    public List<RevenueDTO> revenueListToRevenueDTOList(List<Revenue> revenueList) {
+        List<RevenueDTO> result = new ArrayList<>();
+        for (Revenue revenue : revenueList) {
             result.add(revenueToRevenueDTO(revenue));
         }
         return result;

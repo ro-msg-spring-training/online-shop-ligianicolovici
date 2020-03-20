@@ -2,7 +2,6 @@ package ro.msg.learning.shop.strategies;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Component;
@@ -15,8 +14,8 @@ import ro.msg.learning.shop.mappers.StockMapper;
 import ro.msg.learning.shop.repositories.OrderRepository;
 import ro.msg.learning.shop.repositories.StockRepository;
 import ro.msg.learning.shop.services.StockService;
-import ro.msg.learning.shop.util.LocationFormatMapQuest;
-import ro.msg.learning.shop.util.MapQuestResponse;
+import ro.msg.learning.shop.utils.LocationFormatMapQuest;
+import ro.msg.learning.shop.utils.MapQuestResponse;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -28,17 +27,10 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class GreedyStrategy implements StrategyChoiceInterface {
 
-    @Autowired
-    private StockRepository stockRepository;
-
-    @Autowired
-    private StockService stockService;
-
-    @Autowired
-    private StockMapper stockMapper;
-
-    @Autowired
-    private OrderRepository orderRepository;
+    private final StockRepository stockRepository;
+    private final StockService stockService;
+    private final StockMapper stockMapper;
+    private final OrderRepository orderRepository;
 
     private RestTemplate restTemplate = new RestTemplate();
 
@@ -58,7 +50,7 @@ public class GreedyStrategy implements StrategyChoiceInterface {
             if (stocksContainingDemandedProduct.size() > 1) {
                 for (Stock crtStock : stocksContainingDemandedProduct) {
                     if (demandedProduct.getQuantity() <= crtStock.getQuantity()) {
-                        LocationFormatMapQuest currentLocation = new LocationFormatMapQuest(crtStock.getLocation().getId(), crtStock.getLocation().getAddressCity(), crtStock.getLocation().getAddressCountry());
+                        LocationFormatMapQuest currentLocation = new LocationFormatMapQuest(crtStock.getLocation().getId(), crtStock.getLocation().getAddress().getCity(), crtStock.getLocation().getAddress().getCountry());
                         locationsWithSuitableStocks.add(currentLocation);
                         locationsJSON.put(currentLocation.toString());
                     }
@@ -119,7 +111,7 @@ public class GreedyStrategy implements StrategyChoiceInterface {
                 .productId(demandedProduct.getProductId())
                 .build();
 
-        stockService.updateStock( result, demandedProduct.getQuantity());
+        stockService.updateStock(result, demandedProduct.getQuantity());
 
         return targetStock;
     }
@@ -132,7 +124,7 @@ public class GreedyStrategy implements StrategyChoiceInterface {
                 .productId(demandedProduct.getProductId())
                 .build();
 
-        stockService.updateStock( stocksContainingDemandedProduct.get(0), demandedProduct.getQuantity());
+        stockService.updateStock(stocksContainingDemandedProduct.get(0), demandedProduct.getQuantity());
         return targetStock;
     }
 }

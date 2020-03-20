@@ -4,14 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ro.msg.learning.shop.utils.Address;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 public class LocationDTO {
-    private String addressCity;
-    private String addressStreet;
-    private String addressCountry;
+    private Address address;
     private String name;
 }

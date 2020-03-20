@@ -1,7 +1,6 @@
 package ro.msg.learning.shop.strategies;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ro.msg.learning.shop.dtos.OrderDetailDTO;
 import ro.msg.learning.shop.dtos.StockDTO;
@@ -11,7 +10,7 @@ import ro.msg.learning.shop.exceptions.ProductsCantBeShipped;
 import ro.msg.learning.shop.repositories.LocationRepository;
 import ro.msg.learning.shop.repositories.StockRepository;
 import ro.msg.learning.shop.services.StockService;
-import ro.msg.learning.shop.util.LocationFormatMapQuest;
+import ro.msg.learning.shop.utils.LocationFormatMapQuest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,14 +19,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SingleLocationStrategy implements StrategyChoiceInterface {
 
-    @Autowired
-    private StockRepository stockRepository;
-
-    @Autowired
-    private LocationRepository locationRepository;
-
-    @Autowired
-    private StockService stockService;
+    private final StockRepository stockRepository;
+    private final LocationRepository locationRepository;
+    private final StockService stockService;
 
 
     @Override
@@ -50,7 +44,6 @@ public class SingleLocationStrategy implements StrategyChoiceInterface {
                                         .build()
                         );
                         stockService.updateStock(crtStock, orderProduct.getQuantity());
-
                         if (resultStockList.size() == orderDetailDTOList.size()) {
                             return resultStockList;
                         }

@@ -33,21 +33,13 @@ public class ScheduledTask {
     private final RevenueRepository revenueRepository;
     private final RevenueMapper revenueMapper;
 
-    @Scheduled(cron = "0 0 19 * * *")
+    @Scheduled(cron = "0 44 18 * * *")
     public void reportOnTodayRevenue() {
         LocalDate today = LocalDate.now();
         LocalDateTime from = today.atStartOfDay();
         LocalDateTime to = today.plusDays(1).atStartOfDay();
-
         List<OrderDTOScheduler> ordersOfToday = orderSchedulerMapper.orderListToOrderListDTOSCH(orderRepository.findAllByCreatedAtBetween(from, to));
-        Map<Integer, List<Integer>> ordersAndLocations = new HashMap<>();
-        for (OrderDTOScheduler orderDTOSCH : ordersOfToday) {
-            List<Integer> currentOrderLocations = new ArrayList<>();
-            for (Location location : orderDTOSCH.getLocationSet()) {
-                currentOrderLocations.add(location.getId());
-            }
-            ordersAndLocations.put(orderDTOSCH.getOrderID(), currentOrderLocations);
-        }
+        Map<Integer, List<Integer>> ordersAndLocations = getOrderAndAssociatedLocationsList(ordersOfToday);
         Map<Integer, BigDecimal> locationCosts = new HashMap<>();
         for (Map.Entry<Integer, List<Integer>> entry : ordersAndLocations.entrySet()) {
             List<OrderDetailDTO> orderDetailDTOS = orderDetailMapper.orderDetailListToOrderDetailDTOList(orderDetailsRepository.findAllByOrderId(entry.getKey()));
@@ -63,21 +55,32 @@ public class ScheduledTask {
             }
             for (Integer locationID : entry.getValue())
                 locationCosts.put(locationID, sum.divide(new BigDecimal(2), 0, RoundingMode.HALF_UP));
-
         }
         for (Map.Entry<Integer, BigDecimal> entry : locationCosts.entrySet()) {
             Optional<Location> location = locationRepository.findById(entry.getKey());
-            if(location.isPresent()){
+            if (location.isPresent()) {
                 Revenue revenueToRegister = Revenue.builder()
                         .sum(entry.getValue())
                         .date(LocalDate.now())
                         .location(location.get())
-                    .build();
+                        .build();
                 revenueRepository.save(revenueToRegister);
-            }else{
+            } else {
                 throw new LocationNotFoundException("Location is not registered!");
             }
 
         }
+    }
+
+    public Map<Integer, List<Integer>> getOrderAndAssociatedLocationsList(List<OrderDTOScheduler> ordersOfToday) {
+        Map<Integer, List<Integer>> result = new HashMap<>();
+        for (OrderDTOScheduler orderDTOSCH : ordersOfToday) {
+            List<Integer> currentOrderLocations = new ArrayList<>();
+            for (Location location : orderDTOSCH.getLocationSet()) {
+                currentOrderLocations.add(location.getId());
+            }
+            result.put(orderDTOSCH.getOrderID(), currentOrderLocations);
+        }
+        return result;
     }
 }

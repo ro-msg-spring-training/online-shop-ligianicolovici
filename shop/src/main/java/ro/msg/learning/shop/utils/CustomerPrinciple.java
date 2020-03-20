@@ -1,4 +1,4 @@
-package ro.msg.learning.shop.util;
+package ro.msg.learning.shop.utils;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,15 +11,15 @@ import java.util.Collections;
 import java.util.Optional;
 
 public class CustomerPrinciple implements UserDetails {
-    private transient Customer customer= null;
+    private transient Customer customer = null;
 
-    public CustomerPrinciple(Optional<Customer> optionalCustomer){
-        PasswordEncoder passwordEncoder= new BCryptPasswordEncoder();
-        if(optionalCustomer.isPresent()){
-            this.customer= optionalCustomer.get();
+    public CustomerPrinciple(Optional<Customer> optionalCustomer) {
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        if (optionalCustomer.isPresent()) {
+            this.customer = optionalCustomer.get();
             this.customer.setPassword(passwordEncoder.encode(this.customer.getPassword()));
-        }else{
-            this.customer= null;
+        } else {
+            this.customer = null;
         }
     }
 

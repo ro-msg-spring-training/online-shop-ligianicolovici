@@ -7,7 +7,7 @@ import ro.msg.learning.shop.services.OrderService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/order")
+@RequestMapping(value = "/orders")
 public class OrderController {
 
     private final OrderService orderService;

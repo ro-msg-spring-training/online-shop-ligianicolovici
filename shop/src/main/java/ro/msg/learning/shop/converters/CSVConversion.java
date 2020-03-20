@@ -1,4 +1,4 @@
-package ro.msg.learning.shop.converter;
+package ro.msg.learning.shop.converters;
 
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -14,12 +14,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class CSVConversion<T> {
+    private CsvMapper mapper = new CsvMapper();
+
     public List<T> fromCsv(Class<T> csvClass, InputStream csvData) throws IOException {
+        CsvSchema schema = this.mapper.schemaFor(csvClass).withHeader();
 
-        CsvMapper mapper = new CsvMapper();
-        CsvSchema schema = mapper.schemaFor(csvClass).withHeader();
-
-        MappingIterator<T> it = mapper.readerFor(csvClass).with(schema)
+        MappingIterator<T> it = this.mapper.readerFor(csvClass).with(schema)
                 .readValues(csvData);
 
         return it.readAll();
@@ -27,9 +27,8 @@ public class CSVConversion<T> {
 
     public void toCsv(Class<T> csvClass, List<T> itemsList, OutputStream csvOutput) throws IOException {
         Field[] fields = csvClass.getDeclaredFields();
-        CsvMapper mapper = new CsvMapper();
-        CsvSchema schema = mapper.typedSchemaFor(csvClass);
-        ObjectWriter objectWriter = mapper.writer(schema.withLineSeparator("\n"));
+        CsvSchema schema = this.mapper.typedSchemaFor(csvClass);
+        ObjectWriter objectWriter = this.mapper.writer(schema.withLineSeparator("\n"));
         List<String> headers = Arrays.stream(fields).map(Field::getName).collect(Collectors.toList());
         StringBuilder csvValue = new StringBuilder();
         csvValue.append(objectWriter.writeValueAsString(headers));

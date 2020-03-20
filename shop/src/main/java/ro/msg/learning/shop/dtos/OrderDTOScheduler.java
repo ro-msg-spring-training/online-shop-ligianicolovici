@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ro.msg.learning.shop.entities.Location;
+import ro.msg.learning.shop.utils.Address;
 
 import java.util.List;
 import java.util.Set;
@@ -18,7 +19,5 @@ public class OrderDTOScheduler {
     private Integer userID;
     private Set<Location> locationSet;
     private List<OrderDetailDTO> orderedProducts;
-    private String addressCity;
-    private String addressStreet;
-    private String addressCountry;
+    private Address address;
 }

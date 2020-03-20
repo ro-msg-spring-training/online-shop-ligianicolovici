@@ -1,20 +1,20 @@
 package ro.msg.learning.shop.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ro.msg.learning.shop.entities.Customer;
 import ro.msg.learning.shop.repositories.CustomerRepository;
-import ro.msg.learning.shop.util.CustomerPrinciple;
+import ro.msg.learning.shop.utils.CustomerPrinciple;
 
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class CustomerService implements UserDetailsService {
 
-    @Autowired
-    private CustomerRepository customerRepository;
+    private final CustomerRepository customerRepository;
 
     @Override
     public CustomerPrinciple loadUserByUsername(String username) throws UsernameNotFoundException {

@@ -9,7 +9,5 @@ import java.util.List;
 
 @Component
 public interface OrderRepository extends JpaRepository<Order, Integer> {
-
     List<Order> findAllByCreatedAtBetween(LocalDateTime from, LocalDateTime to);
-
 }

@@ -3,6 +3,7 @@ package ro.msg.learning.shop.entities;
 import lombok.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import ro.msg.learning.shop.utils.Address;
 
 import javax.persistence.*;
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.Set;
 @Entity
 @Builder
 @Table(name = "location")
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded= true)
 public class Location {
     @Id
     @Column(unique = true)
@@ -22,12 +23,14 @@ public class Location {
     private Integer id;
     @EqualsAndHashCode.Include
     private String name;
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "city", column = @Column(name = "address_city")),
+            @AttributeOverride(name = "country", column = @Column(name = "address_country")),
+            @AttributeOverride(name = "street", column = @Column(name = "address_street"))
+    })
     @EqualsAndHashCode.Include
-    private String addressCountry;
-    @EqualsAndHashCode.Include
-    private String addressCity;
-    @EqualsAndHashCode.Include
-    private String addressStreet;
+    private Address address;
 
     @OneToMany(mappedBy = "location", cascade = CascadeType.ALL)
     @ToString.Exclude

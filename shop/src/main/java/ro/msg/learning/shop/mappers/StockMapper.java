@@ -29,16 +29,16 @@ public class StockMapper {
     }
 
     public Stock stockDTOToStock(StockDTO stockDTO) {
-        Optional<Location>stockLocation= locationRepository.findById(stockDTO.getLocationId());
-        Optional<Product>stockProduct = productRepository.findById(stockDTO.getProductId());
-        if(stockLocation.isPresent() && stockProduct.isPresent()){
-        return Stock.builder()
-                .quantity(stockDTO.getQuantity())
-                .location(stockLocation.get())
-                .product(stockProduct.get())
-                .build();
+        Optional<Location> stockLocation = locationRepository.findById(stockDTO.getLocationId());
+        Optional<Product> stockProduct = productRepository.findById(stockDTO.getProductId());
+        if (stockLocation.isPresent() && stockProduct.isPresent()) {
+            return Stock.builder()
+                    .quantity(stockDTO.getQuantity())
+                    .location(stockLocation.get())
+                    .product(stockProduct.get())
+                    .build();
 
-        }else{
+        } else {
             throw new MappingException("Couldn't map the data!");
         }
     }

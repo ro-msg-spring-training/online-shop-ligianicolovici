@@ -10,9 +10,7 @@ import ro.msg.learning.shop.entities.Location;
 public class LocationMapper {
     public LocationDTO locationToLocationDTO(Location location) {
         return LocationDTO.builder()
-                .addressCity(location.getAddressCity())
-                .addressCountry(location.getAddressCountry())
-                .addressStreet(location.getAddressStreet())
+                .address(location.getAddress())
                 .name(location.getName())
                 .build();
 
@@ -20,9 +18,7 @@ public class LocationMapper {
 
     public Location locationDTOToLocation(LocationDTO locationDTO) {
         return Location.builder()
-                .addressCity(locationDTO.getAddressCity())
-                .addressCountry(locationDTO.getAddressCountry())
-                .addressStreet(locationDTO.getAddressStreet())
+                .address(locationDTO.getAddress())
                 .name(locationDTO.getName())
                 .build();
     }

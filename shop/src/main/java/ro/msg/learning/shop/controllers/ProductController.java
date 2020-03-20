@@ -39,7 +39,7 @@ public class ProductController {
         return productService.updateProduct(id, productDTO);
     }
 
-    @GetMapping( value = "/{id}", produces = {"application/json"})
+    @GetMapping(value = "/{id}", produces = {"application/json"})
     @ResponseBody
     public ProductDTO readProductById(@PathVariable Integer id) {
         return productService.getProductById(id);

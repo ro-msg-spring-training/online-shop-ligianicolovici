@@ -15,6 +15,7 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 public class OrderDetailMapper {
+
     private final ProductRepository productRepository;
 
     public OrderDetailDTO orderDetailToOrderDetailDTO(OrderDetail orderDetail) {
@@ -25,13 +26,13 @@ public class OrderDetailMapper {
     }
 
     public OrderDetail orderDetailDTOToOrderDetail(OrderDetailDTO orderDetailDTO) {
-        Optional<Product>orderProduct= productRepository.findById(orderDetailDTO.getProductId());
-        if(orderProduct.isPresent()){
+        Optional<Product> orderProduct = productRepository.findById(orderDetailDTO.getProductId());
+        if (orderProduct.isPresent()) {
             return OrderDetail.builder()
                     .product(orderProduct.get())
                     .quantity(orderDetailDTO.getQuantity())
                     .build();
-        }else{
+        } else {
             throw new ProductNotFoundException("Product not found!");
         }
 

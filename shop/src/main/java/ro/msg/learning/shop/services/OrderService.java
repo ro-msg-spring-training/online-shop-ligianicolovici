@@ -2,7 +2,7 @@ package ro.msg.learning.shop.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ro.msg.learning.shop.configuration.StrategyConfiguration;
+import ro.msg.learning.shop.configurations.StrategyConfiguration;
 import ro.msg.learning.shop.dtos.OrderDTO;
 import ro.msg.learning.shop.dtos.OrderDetailDTO;
 import ro.msg.learning.shop.dtos.ProductDTO;
@@ -15,7 +15,7 @@ import ro.msg.learning.shop.mappers.OrderDetailMapper;
 import ro.msg.learning.shop.mappers.OrderMapper;
 import ro.msg.learning.shop.mappers.ProductMapper;
 import ro.msg.learning.shop.repositories.*;
-import ro.msg.learning.shop.util.LocationFormatMapQuest;
+import ro.msg.learning.shop.utils.LocationFormatMapQuest;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -38,7 +38,7 @@ public class OrderService {
         OrderDTO newOrder;
         LocalDateTime localDateTime = LocalDateTime.now();
         List<OrderDetail> result = registerOrderedProducts(orderDTO.getOrderedProducts(), false);
-        LocationFormatMapQuest deliveryLocation = new LocationFormatMapQuest(null, orderDTO.getAddressCity(), orderDTO.getAddressCountry());
+        LocationFormatMapQuest deliveryLocation = new LocationFormatMapQuest(null, orderDTO.getAddress().getCity(), orderDTO.getAddress().getCountry());
         List<StockDTO> strategyResult = strategyConfiguration.decideStrategy().implementStrategy(orderDetailMapper.orderDetailListToOrderDetailDTOList(result), deliveryLocation);
         Set<Location> locationsForShippingProducts = getShippingLocations(strategyResult);
         if (!strategyResult.isEmpty()) {
@@ -46,9 +46,7 @@ public class OrderService {
             if (client.isPresent()) {
                 Order createNewOrder = Order.builder()
                         .customer(client.get())
-                        .addressCity(orderDTO.getAddressCity())
-                        .addressCountry(orderDTO.getAddressCountry())
-                        .addressStreet(orderDTO.getAddressStreet())
+                        .address(orderDTO.getAddress())
                         .orderDetails(registerOrderedProducts(orderDTO.getOrderedProducts(), true))
                         .shippedFrom(locationsForShippingProducts)
                         .createdAt(localDateTime)

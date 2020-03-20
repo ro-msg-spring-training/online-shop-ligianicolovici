@@ -10,7 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
-import ro.msg.learning.shop.configuration.StrategyConfiguration;
+import ro.msg.learning.shop.configurations.StrategyConfiguration;
 import ro.msg.learning.shop.dtos.OrderDTO;
 import ro.msg.learning.shop.dtos.OrderDetailDTO;
 import ro.msg.learning.shop.entities.OrderDetail;
@@ -19,8 +19,10 @@ import ro.msg.learning.shop.mappers.*;
 import ro.msg.learning.shop.repositories.*;
 import ro.msg.learning.shop.services.OrderService;
 import ro.msg.learning.shop.services.StockService;
+import ro.msg.learning.shop.strategies.GreedyStrategy;
 import ro.msg.learning.shop.strategies.MostAbundantStrategy;
 import ro.msg.learning.shop.strategies.SingleLocationStrategy;
+import ro.msg.learning.shop.utils.Address;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,17 +34,19 @@ import java.util.Optional;
 @DataJpaTest
 @RequiredArgsConstructor
 public class ShopApplicationIntegrationTests {
+
     private final CategoryMapper categoryMapper = new CategoryMapper();
     private final ProductMapper productMapper = new ProductMapper(categoryMapper);
     protected SingleLocationStrategy singleLocationStrategy;
     protected MostAbundantStrategy mostAbundantStrategy;
+    protected GreedyStrategy closestLocationStrategy;
+
     @Autowired
     LocationRepository locationRepository;
     @Autowired
     StockRepository stockRepository;
     @Autowired
     ProductRepository productRepository;
-    private final StockMapper stockMapper = new StockMapper(locationRepository, productRepository);
     @Autowired
     OrderRepository orderRepository;
     @Autowired
@@ -51,18 +55,24 @@ public class ShopApplicationIntegrationTests {
     CustomerRepository customerRepository;
     @Autowired
     OrderDetailsRepository orderDetailsRepository;
+
     private OrderDetailMapper orderDetailMapper;
     private OrderMapper orderMapper;
     private StrategyConfiguration strategyConfiguration;
     private StockService stockService;
     private OrderService orderService;
+    private Address address;
+
+    private final StockMapper stockMapper = new StockMapper(locationRepository, productRepository);
 
     @Before
     public void initialize() {
-        strategyConfiguration = new StrategyConfiguration();
 
-        singleLocationStrategy = new SingleLocationStrategy();
-        mostAbundantStrategy = new MostAbundantStrategy();
+        singleLocationStrategy = new SingleLocationStrategy(stockRepository, locationRepository, stockService);
+        mostAbundantStrategy = new MostAbundantStrategy(stockRepository, stockService);
+        closestLocationStrategy = new GreedyStrategy(stockRepository, stockService, stockMapper, orderRepository);
+        strategyConfiguration = new StrategyConfiguration(singleLocationStrategy, mostAbundantStrategy, closestLocationStrategy);
+
 
         orderDetailMapper = new OrderDetailMapper(productRepository);
         orderMapper = new OrderMapper(orderDetailMapper);
@@ -81,6 +91,9 @@ public class ShopApplicationIntegrationTests {
 
         ReflectionTestUtils.setField(strategyConfiguration, "singleLocationStrategy", singleLocationStrategy);
         ReflectionTestUtils.setField(strategyConfiguration, "mostAbundantStrategy", mostAbundantStrategy);
+        address.setCity("test");
+        address.setCountry("test");
+        address.setStreet("test");
     }
 
     @Test
@@ -91,9 +104,7 @@ public class ShopApplicationIntegrationTests {
                 new OrderDetailDTO(4, 2)
         );
         OrderDTO orderCreationDTO = OrderDTO.builder()
-                .addressCountry("test")
-                .addressStreet("test")
-                .addressCity("test")
+                .address(address)
                 .userID(10)
                 .orderedProducts(orderDetailDTOS)
                 .build();
@@ -123,9 +134,7 @@ public class ShopApplicationIntegrationTests {
                 new OrderDetailDTO(4, 2)
         );
         OrderDTO orderCreationDTO = OrderDTO.builder()
-                .addressCountry("test")
-                .addressStreet("test")
-                .addressCity("test")
+                .address(address)
                 .userID(10)
                 .orderedProducts(orderDetailDTOS)
                 .build();
