@@ -1,4 +1,4 @@
-package ro.msg.learning.shop.configuration;
+package ro.msg.learning.shop.configurations;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
