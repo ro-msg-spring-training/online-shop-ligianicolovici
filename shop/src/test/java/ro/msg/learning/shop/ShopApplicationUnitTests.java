@@ -136,7 +136,7 @@ public class ShopApplicationUnitTests {
     @Test
     public void fromCsvTestSuccess() throws IOException {
         List<StockDTO> expectedStocks = new ArrayList<>();
-        expectedStocks.add(new StockDTO(13, 6, 31));
+        expectedStocks.add(new StockDTO(1,13, 6, 31));
         InputStream inputStream = new ByteArrayInputStream(CSV.getBytes());
 
         Assert.assertEquals(expectedStocks, csvConversion.fromCsv(StockDTO.class, inputStream));
@@ -145,7 +145,7 @@ public class ShopApplicationUnitTests {
     @Test
     public void toCsvTestSuccess() throws IOException {
         List<StockDTO> existingStocks = new ArrayList<>();
-        existingStocks.add(new StockDTO(13, 6, 31));
+        existingStocks.add(new StockDTO(1,13, 6, 31));
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         csvConversion.toCsv(StockDTO.class, existingStocks, outputStream);
 

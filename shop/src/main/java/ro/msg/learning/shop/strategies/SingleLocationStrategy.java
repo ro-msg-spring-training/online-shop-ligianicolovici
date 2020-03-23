@@ -26,34 +26,45 @@ public class SingleLocationStrategy implements StrategyChoiceInterface {
 
     @Override
     public List<StockDTO> implementStrategy(List<OrderDetailDTO> orderDetailDTOList, LocationFormatMapQuest deliveryAddress) {
-        List<Location> allLocations = locationRepository.findAll();
-        List<StockDTO> resultStockList = new ArrayList<>();
-
-        for (Location location : allLocations) {
-            List<Stock> localStock = stockRepository.findAllByLocationId(location.getId());
-
-            resultStockList.clear();
-            for (Stock crtStock : localStock) {
-                for (OrderDetailDTO orderProduct : orderDetailDTOList) {
-                    if (crtStock.getProduct().getId().equals(orderProduct.getProductId()) && orderProduct.getQuantity() <= crtStock.getQuantity()) {
-                        resultStockList.add(
-                                StockDTO.builder()
-                                        .productId(orderProduct.getProductId())
-                                        .locationId(location.getId())
-                                        .quantity(orderProduct.getQuantity())
-                                        .build()
-                        );
-                        stockService.updateStock(crtStock, orderProduct.getQuantity());
-                        if (resultStockList.size() == orderDetailDTOList.size()) {
-                            return resultStockList;
-                        }
-                    }
-                }
-
-            }
-
+        List<Location> locationsWithAvailableStocks = stockRepository.findAllLocationsWithStocksByProductIdIn(getOrderedProductsIDsList(orderDetailDTOList));
+        if (!locationsWithAvailableStocks.isEmpty()) {
+            return getAndUpdateAvailableStocks(locationsWithAvailableStocks, orderDetailDTOList);
         }
         throw new ProductsCantBeShipped("Demanded products can't be taken from single location!");
+
     }
 
+    public List<StockDTO> getAndUpdateAvailableStocks(List<Location> locationsWithAvailableStocks, List<OrderDetailDTO> orderDetailDTOList) {
+        List<StockDTO> resultStockList = new ArrayList<>();
+        List<Stock> stocks = stockRepository.findAllByLocationIdAndProductIdIn(locationsWithAvailableStocks.get(0).getId(), getOrderedProductsIDsList(orderDetailDTOList));
+        for (Stock crtStock : stocks) {
+            for (OrderDetailDTO orderProduct : orderDetailDTOList) {
+                if (crtStock.getProduct().getId().equals(orderProduct.getProductId()) && orderProduct.getQuantity() <= crtStock.getQuantity()) {
+                    resultStockList.add(StockDTO.builder()
+                            .id(crtStock.getId())
+                            .productId(orderProduct.getProductId())
+                            .locationId(crtStock.getId())
+                            .quantity(orderProduct.getQuantity())
+                            .build());
+                    if (resultStockList.size() == orderDetailDTOList.size()) {
+                        updateStocks(resultStockList);
+                        return resultStockList;
+                    }
+                }
+            }
+        }throw new ProductsCantBeShipped("Demanded products can't be taken from single location!");
+    }
+
+    public void updateStocks(List<StockDTO> resultStocks) {
+        for (StockDTO stockDTO : resultStocks)
+            stockService.updateStock(stockRepository.findById(stockDTO.getId()).get(), stockDTO.getQuantity());
+    }
+
+    public List<Integer> getOrderedProductsIDsList(List<OrderDetailDTO> orderDetailDTOList) {
+        List<Integer> orderedProductIds = new ArrayList<>();
+        for (OrderDetailDTO orderDetailDTO : orderDetailDTOList) {
+            orderedProductIds.add(orderDetailDTO.getProductId());
+        }
+        return orderedProductIds;
+    }
 }
