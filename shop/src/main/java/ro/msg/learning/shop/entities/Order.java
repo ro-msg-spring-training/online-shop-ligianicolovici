@@ -16,14 +16,12 @@ import java.util.Set;
 @Entity
 @Builder
 @Table(name = "orders")
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+
 public class Order {
     @Id
     @Column(unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
     private Integer id;
-    @EqualsAndHashCode.Include
     private LocalDateTime createdAt;
     @Embedded
     @AttributeOverrides({
@@ -46,7 +44,6 @@ public class Order {
     private Customer customer;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @ToString.Exclude
     private List<OrderDetail> orderDetails;
 
 

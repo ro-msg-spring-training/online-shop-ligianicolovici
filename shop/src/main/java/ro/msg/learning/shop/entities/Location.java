@@ -15,13 +15,13 @@ import java.util.Set;
 @Entity
 @Builder
 @Table(name = "location")
-@EqualsAndHashCode(onlyExplicitlyIncluded= true)
+@EqualsAndHashCode(exclude = {"stocks", "revenues", "orders"})
+@ToString(exclude = {"stocks", "revenues", "orders"})
 public class Location {
     @Id
     @Column(unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @EqualsAndHashCode.Include
     private String name;
     @Embedded
     @AttributeOverrides({
@@ -29,11 +29,9 @@ public class Location {
             @AttributeOverride(name = "country", column = @Column(name = "address_country")),
             @AttributeOverride(name = "street", column = @Column(name = "address_street"))
     })
-    @EqualsAndHashCode.Include
     private Address address;
 
     @OneToMany(mappedBy = "location", cascade = CascadeType.ALL)
-    @ToString.Exclude
     private List<Stock> stocks;
 
     @ManyToMany(mappedBy = "shippedFrom", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -41,6 +39,5 @@ public class Location {
     private Set<Order> orders;
 
     @OneToMany(mappedBy = "location", cascade = CascadeType.ALL)
-    @ToString.Exclude
     private List<Revenue> revenues;
 }

@@ -33,7 +33,7 @@ public class ScheduledTask {
     private final RevenueRepository revenueRepository;
     private final RevenueMapper revenueMapper;
 
-    @Scheduled(cron = "0 44 18 * * *")
+    @Scheduled(cron = "0 53 09 * * *")
     public void reportOnTodayRevenue() {
         LocalDate today = LocalDate.now();
         LocalDateTime from = today.atStartOfDay();

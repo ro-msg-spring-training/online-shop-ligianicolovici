@@ -43,7 +43,7 @@ public class SingleLocationStrategy implements StrategyChoiceInterface {
                     resultStockList.add(StockDTO.builder()
                             .id(crtStock.getId())
                             .productId(orderProduct.getProductId())
-                            .locationId(crtStock.getId())
+                            .locationId(crtStock.getLocation().getId())
                             .quantity(orderProduct.getQuantity())
                             .build());
                     if (resultStockList.size() == orderDetailDTOList.size()) {
