@@ -79,7 +79,7 @@ public class OrderService {
 
     public List<OrderDetail> registerOrderedProducts(List<OrderDetailDTO> productDetails, boolean saveData) {
         List<OrderDetail> orderDetails = new ArrayList<>();
-        OrderDetail crtOrderDetail = null;
+        OrderDetail crtOrderDetail;
         Optional<ProductDTO> productCheck;
         for (OrderDetailDTO productInfo : productDetails) {
             Optional<Product> orderedProduct = productRepository.findById(productInfo.getProductId());
@@ -87,10 +87,14 @@ public class OrderService {
                 productCheck = Optional.ofNullable(productMapper.productToProductDTO(orderedProduct.get()));
                 if (productCheck.isPresent()) {
                     if (saveData) {
-                        crtOrderDetail = orderDetailsRepository.save(orderDetailMapper.orderDetailDTOToOrderDetail(productInfo));
+                        crtOrderDetail = orderDetailMapper.orderDetailDTOToOrderDetail(productInfo);
+                        crtOrderDetail.setProduct(orderedProduct.get());
+                        orderDetailsRepository.save(crtOrderDetail);
                         orderDetails.add(crtOrderDetail);
                     } else {
-                        orderDetails.add(orderDetailMapper.orderDetailDTOToOrderDetail(productInfo));
+                        crtOrderDetail = orderDetailMapper.orderDetailDTOToOrderDetail(productInfo);
+                        crtOrderDetail.setProduct(orderedProduct.get());
+                        orderDetails.add(crtOrderDetail);
                     }
                 }
             } else {

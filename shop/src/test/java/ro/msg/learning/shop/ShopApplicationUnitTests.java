@@ -1,6 +1,7 @@
 package ro.msg.learning.shop;
 
 
+import lombok.SneakyThrows;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -46,7 +47,9 @@ public class ShopApplicationUnitTests {
     private static final String mockStrategy = "single_location";
 
     public StockRepository stockRepository = mock(StockRepository.class);
+    public StockRepositoryCustom stockRepositoryCustom = mock(StockRepositoryCustom.class);
     public LocationRepository locationRepository = mock(LocationRepository.class);
+    public LocationRepositoryCustom locationRepositoryCustom = mock(LocationRepositoryCustom.class);
     public StockMapper stockMapper = mock(StockMapper.class);
     public OrderRepository orderRepository = mock(OrderRepository.class);
     public OrderMapper orderMapper = mock(OrderMapper.class);
@@ -77,9 +80,10 @@ public class ShopApplicationUnitTests {
     private StockDTO stockDTO;
     private CSVConversion<StockDTO> csvConversion;
     private StockService stockService = new StockService(stockRepository, locationRepository, stockMapper);
-    private SingleLocationStrategy mockSingleLocationStrategy = new SingleLocationStrategy(stockRepository, locationRepository, stockService);
+
+    private SingleLocationStrategy mockSingleLocationStrategy = new SingleLocationStrategy(stockRepository, locationRepository, stockMapper, stockService, stockRepositoryCustom, locationRepositoryCustom);
     private MostAbundantStrategy mockMostAbundantStrategy = new MostAbundantStrategy(stockRepository, stockService);
-    private GreedyStrategy mockClosestLocationStrategy = new GreedyStrategy(stockRepository, stockService, stockMapper, orderRepository);
+    private GreedyStrategy mockClosestLocationStrategy = new GreedyStrategy(stockRepository, stockService, stockRepositoryCustom, locationRepositoryCustom, locationRepository, stockMapper, orderRepository);
     private StrategyConfiguration strategyConfiguration = new StrategyConfiguration(mockSingleLocationStrategy, mockMostAbundantStrategy, mockClosestLocationStrategy);
     private OrderService orderService = new OrderService(orderRepository, orderMapper, orderDetailsRepository, orderDetailMapper, productRepository, productMapper, customerRepository, strategyConfiguration, locationRepository);
 
@@ -125,7 +129,8 @@ public class ShopApplicationUnitTests {
     }
 
     @Test
-    public void exportStocksToCsvSuccess() throws Exception {
+    @SneakyThrows
+    public void exportStocksToCsvSuccess() {
         Mockito.when((locationRepository.findById(anyInt()))).thenReturn(mockLocationOptional);
         Mockito.when((stockRepository.findAllByLocationId(anyInt()))).thenReturn(mockStockList);
         Mockito.when((stockMapper.stockListToStockListDTO(anyList()))).thenReturn(mockStockDtoList);
@@ -136,7 +141,7 @@ public class ShopApplicationUnitTests {
     @Test
     public void fromCsvTestSuccess() throws IOException {
         List<StockDTO> expectedStocks = new ArrayList<>();
-        expectedStocks.add(new StockDTO(1,13, 6, 31));
+        expectedStocks.add(new StockDTO(1, 13, 6, 31));
         InputStream inputStream = new ByteArrayInputStream(CSV.getBytes());
 
         Assert.assertEquals(expectedStocks, csvConversion.fromCsv(StockDTO.class, inputStream));
@@ -145,7 +150,7 @@ public class ShopApplicationUnitTests {
     @Test
     public void toCsvTestSuccess() throws IOException {
         List<StockDTO> existingStocks = new ArrayList<>();
-        existingStocks.add(new StockDTO(1,13, 6, 31));
+        existingStocks.add(new StockDTO(1, 13, 6, 31));
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         csvConversion.toCsv(StockDTO.class, existingStocks, outputStream);
 
@@ -161,7 +166,7 @@ public class ShopApplicationUnitTests {
         Mockito.when((locationRepository.findAll())).thenReturn(allMockLocations);
         Mockito.when((stockRepository.findAllByLocationId(anyInt()))).thenReturn(mockStrategyStockList);
 
-        List<OrderDetailDTO> orderDetailDTOS = Arrays.asList(
+        List<OrderDetailDTO> orderDetailDTOS = Collections.singletonList(
                 new OrderDetailDTO(10, 2)
         );
 

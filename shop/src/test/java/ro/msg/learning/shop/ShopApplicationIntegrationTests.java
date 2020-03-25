@@ -55,6 +55,10 @@ public class ShopApplicationIntegrationTests {
     CustomerRepository customerRepository;
     @Autowired
     OrderDetailsRepository orderDetailsRepository;
+    @Autowired
+    StockRepositoryCustom stockRepositoryCustom;
+    @Autowired
+    LocationRepositoryCustom locationRepositoryCustom;
 
     private OrderDetailMapper orderDetailMapper;
     private OrderMapper orderMapper;
@@ -68,13 +72,13 @@ public class ShopApplicationIntegrationTests {
     @Before
     public void initialize() {
 
-        singleLocationStrategy = new SingleLocationStrategy(stockRepository, locationRepository, stockService);
+        singleLocationStrategy = new SingleLocationStrategy(stockRepository, locationRepository, stockMapper,stockService,stockRepositoryCustom,locationRepositoryCustom);
         mostAbundantStrategy = new MostAbundantStrategy(stockRepository, stockService);
-        closestLocationStrategy = new GreedyStrategy(stockRepository, stockService, stockMapper, orderRepository);
+        closestLocationStrategy = new GreedyStrategy(stockRepository, stockService,stockRepositoryCustom, locationRepositoryCustom, locationRepository,stockMapper, orderRepository);
         strategyConfiguration = new StrategyConfiguration(singleLocationStrategy, mostAbundantStrategy, closestLocationStrategy);
 
 
-        orderDetailMapper = new OrderDetailMapper(productRepository);
+        orderDetailMapper = new OrderDetailMapper();
         orderMapper = new OrderMapper(orderDetailMapper);
 
         stockService = new StockService(stockRepository, locationRepository, stockMapper);
