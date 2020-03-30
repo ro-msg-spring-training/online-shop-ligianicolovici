@@ -18,4 +18,5 @@ public class SpringJdbcConfig {
 
         return dataSource;
     }
+
 }

@@ -8,7 +8,7 @@ import ro.msg.learning.shop.dtos.OrderDetailDTO;
 import ro.msg.learning.shop.dtos.ProductDTO;
 import ro.msg.learning.shop.dtos.StockDTO;
 import ro.msg.learning.shop.entities.*;
-import ro.msg.learning.shop.exceptions.ClientIsNotRegistered;
+import ro.msg.learning.shop.exceptions.CustomerNotRegistered;
 import ro.msg.learning.shop.exceptions.ProductNotFoundException;
 import ro.msg.learning.shop.exceptions.ProductsCantBeShipped;
 import ro.msg.learning.shop.mappers.OrderDetailMapper;
@@ -60,7 +60,7 @@ public class OrderService {
                 newOrder = orderMapper.orderToOrderDto(createNewOrder);
                 return newOrder;
             } else {
-                throw new ClientIsNotRegistered("Client is not registered in the system!");
+                throw new CustomerNotRegistered("Client is not registered in the system!");
             }
         } else {
             throw new ProductsCantBeShipped("No location to take products from");

@@ -7,11 +7,13 @@ import ro.msg.learning.shop.dtos.CategoryDTO;
 import ro.msg.learning.shop.dtos.ProductDTO;
 import ro.msg.learning.shop.entities.Product;
 import ro.msg.learning.shop.entities.ProductCategory;
+import ro.msg.learning.shop.entities.Stock;
 import ro.msg.learning.shop.exceptions.ProductNotFoundException;
 import ro.msg.learning.shop.jdbc.repositories.CategoryRepositoryJDBC;
 import ro.msg.learning.shop.jdbc.repositories.ProductRepositoryJDBC;
 import ro.msg.learning.shop.mappers.ProductMapper;
 import ro.msg.learning.shop.repositories.ProductRepository;
+import ro.msg.learning.shop.repositories.StockRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +23,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
+    private final StockRepository stockRepository;
     private final ProductMapper productMapper;
     private final CategoryRepositoryJDBC categoryRepositoryJDBC;
     private final ProductRepositoryJDBC productRepositoryJDBC;
@@ -72,6 +75,10 @@ public class ProductService {
     }
 
     public void deleteProductById(Integer id) {
+        List<Stock> stocksWithProduct = stockRepository.findAllByProductId(id);
+        if (!stocksWithProduct.isEmpty()) {
+            stockRepository.deleteAll(stocksWithProduct);
+        }
         productRepositoryJDBC.deleteById(id);
     }
 

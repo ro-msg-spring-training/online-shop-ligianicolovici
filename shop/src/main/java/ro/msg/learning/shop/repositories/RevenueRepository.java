@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Component
 public interface RevenueRepository extends JpaRepository<Revenue, Integer> {
-    public List<Revenue> findAllByDate(LocalDate givenDate);
+    List<Revenue> findAllByDate(LocalDate givenDate);
 
-    public Optional<Revenue> findById(Integer revenueId);
+    Optional<Revenue> findById(Integer revenueId);
 }

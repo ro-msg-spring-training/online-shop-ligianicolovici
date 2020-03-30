@@ -4,5 +4,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import ro.msg.learning.shop.entities.Product;
 
 public interface ProductRepository extends JpaRepository<Product, Integer> {
-    public void deleteById(Integer id);
+    void deleteById(Integer id);
 }
