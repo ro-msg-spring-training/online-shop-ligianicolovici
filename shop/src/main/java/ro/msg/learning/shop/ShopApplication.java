@@ -1,7 +1,6 @@
 package ro.msg.learning.shop;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -24,9 +23,8 @@ public class ShopApplication implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws Exception {
-        customerMongoRepository.save(new Customer(0,"mongo_test_user1","db",null,null,null, Collections.emptyList()));
-        customerMongoRepository.save(new Customer(1,"mongo_test_user2","db","test",null,"test@msg.group", Collections.emptyList()));
-
+    public void run(String... args) {
+        customerMongoRepository.save(new Customer(0, "mongo_test_user1", "db", null, null, null, Collections.emptyList()));
+        customerMongoRepository.save(new Customer(1, "mongo_test_user2", "db", "test", null, "test@msg.group", Collections.emptyList()));
     }
 }

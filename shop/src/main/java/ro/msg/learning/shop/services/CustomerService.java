@@ -1,7 +1,6 @@
 package ro.msg.learning.shop.services;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -42,5 +41,10 @@ public class CustomerService implements UserDetailsService {
             return customerMapper.customerToCustomerDTO(customerNotFound);
         }
     }
+
+    public void registerNewCustomer(Customer customer) {
+        customerRepository.save(customer);
+    }
+
 }
 

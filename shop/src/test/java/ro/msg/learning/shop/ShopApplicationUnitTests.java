@@ -118,7 +118,7 @@ public class ShopApplicationUnitTests {
         mockCategory = new ProductCategory(1, "category", "categoryDescription", mockProductList);
         mockCategoryDTO = new CategoryDTO("category", "categoryDescription");
         mockProduct = new Product(10, "test", "descriere", new BigDecimal("0.03"), 221.22, "something", mockSupplier, mockCategory, mockStockList, mockOrderDetails);
-        mockProductDTO = new ProductDTO("test", "descriere", new BigDecimal("0.03"), 221.22, "something", mockCategoryDTO);
+        mockProductDTO = new ProductDTO(1,"test", "descriere", new BigDecimal("0.03"), 221.22, "something", mockCategoryDTO);
         mockProductList.add(mockProduct);
         mockOrderDetailDTOS = new ArrayList<>();
         mockOrderDetailDTOS.add(new OrderDetailDTO(10, 2));

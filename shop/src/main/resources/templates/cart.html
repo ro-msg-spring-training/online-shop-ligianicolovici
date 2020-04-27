@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+      integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<head>
+    <title>Cart Content</title>
+
+</head>
+<body>
+
+<div>
+    <nav class="navbar navbar-dark bg-dark">
+        <span class="navbar-brand" style="margin-left: 50%">Cart contents</span>
+    </nav>
+    <br/>
+    <br/>
+
+    <form th:action="@{/registerProducts}" th:object="${order}" method="post" style="width: 50%; margin-left: 25%">
+        <table id="cartContents" class="table table-bordered">
+            <thead class="thead-dark">
+            <tr>
+                <th> Product</th>
+                <th> Quantity</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item,iterator: ${orderCartProducts}">
+                <td contenteditable="true">
+                    <p>
+                        <input type="hidden" th:text="${item.name}" th:value="${item.productID}"
+                               th:field="*{toOrderCartProducts[__${iterator.index}__].productID}" readonly/>
+                        <input type="hidden" th:value="${item.name}"
+                               th:field="*{toOrderCartProducts[__${iterator.index}__].name}" readonly/>
+                    </p>
+                </td>
+                <td contenteditable="true">
+                    <label>
+                        <input type="number" th:value="${item.quantity}" th:min=1
+                               th:field="*{toOrderCartProducts[__${iterator.index}__].quantity}" value="1">
+                    </label>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <button class="btn btn-sm btn-outline-secondary" type="submit">Done</button>
+    </form>
+</div>
+</body>
+</html>

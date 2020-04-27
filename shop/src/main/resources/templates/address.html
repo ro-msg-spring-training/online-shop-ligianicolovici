@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+      integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <title>Delivery Address</title>
+</head>
+<body>
+
+<div>
+    <nav class="navbar navbar-dark bg-dark">
+        <span class="navbar-brand" style="margin-left: 50%">Insert delivery address</span>
+    </nav>
+    <br/>
+    <br/>
+
+
+    <form th:action="@{/orderDone}" th:object="${address}" method="post"
+          style="width: 50%; margin-left: 25%">
+
+        <fieldset style="border-style: dashed; border-color: darkcyan">
+            <legend>Delivery Address</legend>
+            <div th:if="${param.error}" class="alert alert-error">
+                Invalid insertion of date. Please recheck.
+            </div>
+
+            <label>City
+            <input class="form-control" type="text" th:field="*{city}" id="city" placeholder="city"
+                   autofocus="autofocus">
+            </label>
+            <br>
+
+            <label>Street
+            <input class="form-control" type="text" th:field="*{street}" id="street" placeholder="street">
+            </label>
+            <br>
+
+            <label>Country
+            <input class="form-control" type="text" th:field="*{country}" id="country" placeholder="country">
+            </label>
+            <br>
+
+            <button class="btn btn-sm btn-outline-secondary" type="submit">Send order</button>
+        </fieldset>
+    </form>
+</div>
+</body>
+</html>
