@@ -11,4 +11,9 @@ public class CartProduct {
     private String name;
     private Integer productID;
     private Integer quantity;
+
+    @Override
+    public String toString() {
+        return name + " | " + quantity + "\n";
+    }
 }

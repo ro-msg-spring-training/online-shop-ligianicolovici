@@ -16,4 +16,13 @@ public class OrderContent {
     public void addCartProduct(CartProduct product) {
         this.toOrderCartProducts.add(product);
     }
+
+    @Override
+    public String toString() {
+        StringBuilder toDisplay = new StringBuilder();
+        for (CartProduct productDetails : toOrderCartProducts) {
+            toDisplay.append(productDetails.toString()).append("\n");
+        }
+        return toDisplay.toString();
+    }
 }

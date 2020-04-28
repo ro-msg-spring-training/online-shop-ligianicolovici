@@ -4,14 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ro.msg.learning.shop.dtos.CustomerDTO;
 import ro.msg.learning.shop.entities.Customer;
+import ro.msg.learning.shop.exceptions.CustomerNotRegistered;
 import ro.msg.learning.shop.mappers.CustomerMapper;
 import ro.msg.learning.shop.repositories.CustomerMongoRepository;
 import ro.msg.learning.shop.repositories.CustomerRepository;
 import ro.msg.learning.shop.utils.CustomerPrinciple;
 
-import java.util.Collections;
 import java.util.Optional;
 
 @Service
@@ -32,14 +31,14 @@ public class CustomerService implements UserDetailsService {
         }
     }
 
-    public CustomerDTO getCustomerByUsername(String username) {
-        Optional<Customer> customer = Optional.ofNullable(customerMongoRepository.findByUsername(username));
-        if (customer.isPresent()) {
-            return customerMapper.customerToCustomerDTO(customer.get());
+    public Integer getCustomerIdByUsername(String username) {
+        Optional<Customer> result = customerRepository.findByUsername(username);
+        if (result.isPresent()) {
+            return result.get().getId();
         } else {
-            Customer customerNotFound = new Customer(0, null, null, null, null, null, Collections.emptyList());
-            return customerMapper.customerToCustomerDTO(customerNotFound);
+            throw new CustomerNotRegistered("Couldn't find customer!");
         }
+
     }
 
     public void registerNewCustomer(Customer customer) {

@@ -3,17 +3,13 @@ package ro.msg.learning.shop.services;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import ro.msg.learning.shop.dtos.OrderDTO;
 import ro.msg.learning.shop.dtos.OrderDetailDTO;
 import ro.msg.learning.shop.dtos.ProductDTO;
 import ro.msg.learning.shop.mappers.ProductMapper;
 import ro.msg.learning.shop.repositories.ProductRepository;
-import ro.msg.learning.shop.utils.Address;
-import ro.msg.learning.shop.utils.Cart;
-import ro.msg.learning.shop.utils.CartProduct;
-import ro.msg.learning.shop.utils.OrderContent;
+import ro.msg.learning.shop.utils.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CartService {
     private OrderDTO orderToBePlace;
+    private OrderContent orderContent;
 
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
@@ -45,17 +42,18 @@ public class CartService {
     }
 
     public void buildOrder(OrderContent order) {
+        orderContent = order;
         orderToBePlace = new OrderDTO();
         List<OrderDetailDTO> orderDetails = new ArrayList<>();
         Address deliveryAddress = new Address();
         String username;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof User) {
-            username = ((User) principal).getUsername();
+        if (principal instanceof CustomerPrinciple) {
+            username = ((CustomerPrinciple) principal).getUsername();
         } else {
             username = principal.toString();
         }
-        orderToBePlace.setUserID(customerService.getCustomerByUsername(username).getId());
+        orderToBePlace.setUserID(customerService.getCustomerIdByUsername(username));
         for (CartProduct orderProductInfo : order.getToOrderCartProducts()) {
             OrderDetailDTO orderDetailDTO = new OrderDetailDTO();
             orderDetailDTO.setProductId(orderProductInfo.getProductID());
