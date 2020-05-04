@@ -65,10 +65,13 @@ public class CartService {
     }
 
     public void clearCart() {
-        orderToBePlace.setAddress(new Address());
-        orderToBePlace.setOrderedProducts(new ArrayList<>());
-        orderToBePlace.setUserID(null);
-        orderToBePlace.setOrderID(null);
+        if (orderToBePlace != null) {
+            orderToBePlace.setAddress(new Address());
+            orderToBePlace.setOrderedProducts(new ArrayList<>());
+            orderToBePlace.setUserID(null);
+            orderToBePlace.setOrderID(null);
+        }
+
     }
 
 

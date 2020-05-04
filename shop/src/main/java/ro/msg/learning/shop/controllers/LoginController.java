@@ -5,9 +5,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import ro.msg.learning.shop.dtos.ProductDTO;
 import ro.msg.learning.shop.entities.Customer;
 import ro.msg.learning.shop.mappers.ProductMapper;
@@ -16,6 +14,9 @@ import ro.msg.learning.shop.services.CartService;
 import ro.msg.learning.shop.services.CustomerService;
 import ro.msg.learning.shop.utils.Cart;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -62,6 +63,18 @@ public class LoginController {
         model.addAttribute("products", products);
         model.addAttribute("demands", demands);
         return "home";
+    }
+
+    @GetMapping(value = "/")
+    public void redirect(HttpServletResponse response) throws IOException {
+        response.sendRedirect("/home");
+    }
+
+
+    @GetMapping("/user")
+    @ResponseBody
+    public Principal user(Principal principal) {
+        return principal;
     }
 
 }

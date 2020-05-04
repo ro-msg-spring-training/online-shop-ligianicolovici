@@ -1,5 +1,7 @@
 package ro.msg.learning.shop.utils;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -10,6 +12,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
 
+@Data
+@AllArgsConstructor
 public class CustomerPrinciple implements UserDetails {
     private transient Customer customer = null;
 
@@ -25,7 +29,7 @@ public class CustomerPrinciple implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.EMPTY_LIST;
+        return Collections.emptyList();
     }
 
     @Override

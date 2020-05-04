@@ -1,5 +1,6 @@
 package ro.msg.learning.shop.configurations;
 
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,7 +18,6 @@ import ro.msg.learning.shop.services.UserCredentialsService;
 import ro.msg.learning.shop.utils.UserCredentials;
 
 import java.util.List;
-
 
 @Configuration
 @RequiredArgsConstructor
@@ -58,9 +58,23 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             case "with-form":
                 configureFormBased(http);
                 break;
+            case "oauth2":
+                configureOAuth2(http);
+                break;
             default:
         }
     }
+
+    private void configureOAuth2(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity
+          .csrf().disable()
+                .formLogin().disable()
+                .httpBasic().disable()
+                .authorizeRequests().anyRequest().authenticated()
+                .and()
+          .oauth2Login()
+          .defaultSuccessUrl("/home");
+        }
 
     @Autowired
     public void configureGlobal(final AuthenticationManagerBuilder auth) throws Exception {
