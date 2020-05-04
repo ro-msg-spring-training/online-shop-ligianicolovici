@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<head>
+    <meta charset="UTF-8">
+    <title>Login Page</title>
+</head>
+<body>
+<form th:action="@{/login}" th:object="${user}" method="post"  style="width: auto; margin-left: 25%; margin-right: 25%">
+    <fieldset style="border-style: dashed; border-color: darkcyan">
+        <legend>Please Login</legend>
+        <div th:if="${param.error}" class="alert alert-error">
+            Invalid username and password.
+        </div>
+        <div th:if="${param.logout}" class="alert alert-success">
+            You have been logged out.
+        </div>
+    <label for="username">Username</label>
+    <input class="form-control" type="text" th:field="*{username}" id="username" placeholder="username" autofocus="autofocus">
+    <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
+    <br>
+
+    <label for="password">Password</label>
+    <input  class="form-control" type="password" th:field="*{password}" id="password" placeholder="password">
+    <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+    <br>
+    <input class="btn btn-primary" type="submit" value="Login" th:action="@{/login}" >
+    </fieldset>
+</form>
+</body>
+</html>

@@ -1,0 +1,24 @@
+{
+  "properties": [
+    {
+      "name": "strategy",
+      "type": "ro.msg.learning.shop.strategies.StrategyEnum",
+      "description": "Description for strategy."
+    },
+    {
+      "name": "security.option",
+      "type": "java.lang.String",
+      "description": "Description for security.option."
+    },
+    {
+      "name": "mapQuest.key",
+      "type": "java.lang.String",
+      "description": "Description for mapQuest.key."
+    },
+    {
+      "name": "spring.mail.subject",
+      "type": "java.lang.String",
+      "description": "Description for spring.mail.subject."
+    }
+  ]
+}
